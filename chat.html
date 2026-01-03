@@ -14,44 +14,43 @@
       height: 100vh;
     }
 
-  header {
-  background: #0a2a43;
-  color: white;
-  padding: 18px;
-  text-align: center;
-  font-weight: bold;
-  font-size: 20px;
-  letter-spacing: 1px;
-}
+    header {
+      background: #0a2a43;
+      color: white;
+      padding: 18px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 20px;
+      letter-spacing: 1px;
     }
 
-.chat-area {
-  flex: 1;
-  padding: 15px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-}
+    .chat-area {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
 
     .message {
-      background: white;
       padding: 10px;
       border-radius: 8px;
-      max-width: 90%;
+      max-width: 80%;
       margin-bottom: 10px;
       box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      word-wrap: break-word;
     }
+
     .message.user {
-  background: #dcf8c6;
-  align-self: flex-end;
-}
+      background: #dcf8c6;
+      align-self: flex-end;
+    }
 
-.message.ai {
-  background: #ffffff;
-  align-self: flex-start;
-}
-
+    .message.ai {
+      background: #ffffff;
+      align-self: flex-start;
+    }
 
     footer {
       padding: 10px;
@@ -77,80 +76,64 @@
 
 <body>
 
-  <!-- Header -->
-  <header>
-    NIDAAN AI
-  </header>
+  <header>NIDAAN AI</header>
 
-  <!-- Chat messages -->
-  <div class="chat-area">
+  <div class="chat-area" id="chatArea">
     <div class="message ai">
       Hello 👋 I’m <b>NIDAAN AI</b> — your intelligent SS Rig assistant.<br>
       How may I help you?
     </div>
   </div>
 
-  <!-- Input box -->
   <footer>
-   <input type="text" id="userInput" placeholder="Type your message...">
-<button onclick="sendMessage()">Send</button>
+    <input type="text" id="userInput" placeholder="Type your message...">
+    <button onclick="sendMessage()">Send</button>
   </footer>
+
   <script>
-    <script>
-  document.addEventListener("DOMContentLoaded", () => {
     const input = document.getElementById("userInput");
-    input.addEventListener("keypress", function (e) {
+    const chat = document.getElementById("chatArea");
+
+    // ENTER key support
+    input.addEventListener("keydown", function (e) {
       if (e.key === "Enter") {
         sendMessage();
       }
     });
-  });
 
- <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const input = document.getElementById("userInput");
-    input.addEventListener("keypress", function (e) {
-      if (e.key === "Enter") {
-        sendMessage();
-      }
-    });
-  });
+    function sendMessage() {
+      const text = input.value.trim();
+      if (text === "") return;
 
-  function sendMessage() {
-    const input = document.getElementById("userInput");
-    const text = input.value.trim();
-    if (text === "") return;
+      // USER MESSAGE
+      const userMsg = document.createElement("div");
+      userMsg.className = "message user";
+      userMsg.innerText = text;
+      chat.appendChild(userMsg);
 
-    const chat = document.querySelector(".chat-area");
-
-    // USER MESSAGE (RIGHT)
-    const userMsg = document.createElement("div");
-    userMsg.className = "message user";
-    userMsg.innerText = text;
-    chat.appendChild(userMsg);
-
-    input.value = "";
-    chat.scrollTop = chat.scrollHeight;
-
-    // TYPING INDICATOR (LEFT)
-    const typing = document.createElement("div");
-    typing.className = "message ai";
-    typing.innerText = "NIDAAN AI is typing...";
-    chat.appendChild(typing);
-    chat.scrollTop = chat.scrollHeight;
-
-    // FAKE AI RESPONSE (abhi ke liye)
-    setTimeout(() => {
-      typing.remove();
-
-      const aiMsg = document.createElement("div");
-      aiMsg.className = "message ai";
-      aiMsg.innerText = "Got it 👍 (AI response will come here)";
-      chat.appendChild(aiMsg);
+      input.value = "";
       chat.scrollTop = chat.scrollHeight;
-    }, 1200);
-  }
-</script>
+
+      // TYPING INDICATOR
+      const typing = document.createElement("div");
+      typing.className = "message ai";
+      typing.innerText = "NIDAAN AI is typing...";
+      chat.appendChild(typing);
+      chat.scrollTop = chat.scrollHeight;
+
+      // FAKE AI RESPONSE
+      setTimeout(() => {
+        typing.remove();
+
+        const aiMsg = document.createElement("div");
+        aiMsg.className = "message ai";
+        aiMsg.innerText = "Got it 👍 (AI response will come here)";
+        chat.appendChild(aiMsg);
+        chat.scrollTop = chat.scrollHeight;
+      }, 1200);
+    }
+  </script>
 
 </body>
 </html>
+
