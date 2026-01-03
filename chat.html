@@ -42,7 +42,7 @@ header {
   letter-spacing: 2px;
 }
 
-/* 🌙 DARK MODE TOGGLE */
+/* DARK MODE TOGGLE */
 #darkToggle {
   position: absolute;
   right: 18px;
@@ -65,7 +65,6 @@ header {
   display: flex;
   flex-direction: column;
   gap: 14px;
-  transition: background 0.3s;
 }
 
 .message {
@@ -77,14 +76,14 @@ header {
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
-/* USER – Forest Green (unchanged) */
+/* USER – Forest Green */
 .user {
   align-self: flex-end;
   background: #228B22;
   color: #ffffff;
 }
 
-/* AI – Light */
+/* AI */
 .ai {
   align-self: flex-start;
   background: rgba(255,255,255,0.78);
@@ -103,6 +102,22 @@ header {
   font-weight: bold;
 }
 
+/* ⏳ DOT ANIMATION */
+.dots::after {
+  content: '';
+  display: inline-block;
+  width: 1.2em;
+  text-align: left;
+  animation: dots 1.4s steps(3, end) infinite;
+}
+
+@keyframes dots {
+  0%   { content: ''; }
+  33%  { content: '.'; }
+  66%  { content: '..'; }
+  100% { content: '...'; }
+}
+
 /* TIME */
 .time {
   font-size: 12px;
@@ -118,7 +133,6 @@ footer {
   padding: 12px;
   background: #ffffff;
   border-top: 1px solid #ccc;
-  transition: background 0.3s;
 }
 
 input {
@@ -153,35 +167,24 @@ button {
   background: linear-gradient(135deg, #e53935, #b71c1c);
 }
 
-/* ================= DARK MODE ================= */
+/* DARK MODE */
 body.dark {
   background: #121212;
 }
-
-body.dark .chat-area {
-  background: #121212;
-}
-
 body.dark footer {
   background: #1e1e1e;
-  border-top: 1px solid #333;
 }
-
 body.dark input {
   background: #2a2a2a;
   color: #fff;
-  border: 1px solid #444;
 }
-
 body.dark .ai {
   background: rgba(40,40,40,0.9);
   color: #f1f1f1;
 }
-
 body.dark .thinking {
   background: rgba(90,130,90,0.95);
 }
-
 body.dark .typing {
   background: rgba(80,100,140,0.95);
 }
@@ -216,13 +219,12 @@ const sendBtn = document.getElementById("sendBtn");
 const micBtn = document.getElementById("micBtn");
 const darkToggle = document.getElementById("darkToggle");
 
-/* ========== DARK MODE LOGIC ========== */
+/* DARK MODE */
 const savedMode = localStorage.getItem("darkMode");
 if (savedMode === "on") {
   document.body.classList.add("dark");
   darkToggle.textContent = "☀";
 }
-
 darkToggle.onclick = () => {
   document.body.classList.toggle("dark");
   const dark = document.body.classList.contains("dark");
@@ -275,7 +277,7 @@ function sendMessage() {
 
   const thinking = document.createElement("div");
   thinking.className = "message ai thinking";
-  thinking.textContent = "NIDAAN AI is thinking...";
+  thinking.innerHTML = `NIDAAN AI is thinking<span class="dots"></span>`;
   chat.appendChild(thinking);
 
   setTimeout(() => {
@@ -283,7 +285,7 @@ function sendMessage() {
 
     const typing = document.createElement("div");
     typing.className = "message ai typing";
-    typing.textContent = "NIDAAN AI is typing...";
+    typing.innerHTML = `NIDAAN AI is typing<span class="dots"></span>`;
     chat.appendChild(typing);
 
     fetch("https://n8n-oazxlbnc.us-west-1.clawcloudrun.com/webhook/nidaan-chat", {
