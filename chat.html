@@ -8,7 +8,7 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f5f5f5;
+      background: #f4f6f9;
       display: flex;
       flex-direction: column;
       height: 100vh;
@@ -16,15 +16,16 @@
 
     /* ================= HEADER ================= */
     header {
-      background: linear-gradient(120deg, #0a2a43, #133e7c, #0a2a43);
-      background-size: 200% 200%;
-      animation: shine 6s ease infinite;
+      background: linear-gradient(135deg, #0a2a43, #1e4fa3, #0a2a43);
+      background-size: 300% 300%;
+      animation: shine 7s ease infinite;
       color: white;
-      padding: 22px;
+      padding: 24px;
       text-align: center;
       font-weight: bold;
-      font-size: 2.2rem; /* 2x size */
-      letter-spacing: 1px;
+      font-size: 2.3rem;
+      letter-spacing: 2px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.35);
     }
 
     @keyframes shine {
@@ -40,52 +41,63 @@
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      scroll-behavior: smooth;
+      gap: 12px;
     }
 
     .message {
-      padding: 12px;
-      border-radius: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
       max-width: 80%;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       word-wrap: break-word;
       font-size: 15px;
+      line-height: 1.45;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
     }
 
-    /* USER MESSAGE – LUCARATIVE GREEN */
-    .message.user {
+    .timestamp {
+      font-size: 11px;
+      opacity: 0.6;
+      margin-top: 4px;
+      text-align: right;
+    }
+
+    /* USER MESSAGE */
+    .user {
       background: linear-gradient(135deg, #00c853, #64dd17);
-      color: #ffffff;
+      color: white;
       align-self: flex-end;
-      font-weight: 500;
-      border-radius: 14px 14px 2px 14px;
-      box-shadow: 0 4px 10px rgba(0,200,83,0.35);
+      box-shadow: 0 5px 14px rgba(0,200,83,0.45);
     }
 
     /* AI MESSAGE */
-    .message.ai {
-      background: #ffffff;
+    .ai {
+      background: linear-gradient(145deg, #ffffff, #eef2f7);
       color: #1f2937;
       align-self: flex-start;
-      border-radius: 14px 14px 14px 2px;
     }
 
-    /* ================= FLOATING TYPING ================= */
-    #typing-indicator {
+    /* ================= FLOATING STATUS ================= */
+    .status {
       position: fixed;
-      bottom: 80px;
+      bottom: 85px;
       left: 50%;
       transform: translateX(-50%);
-      background: linear-gradient(135deg, #2979ff, #00b0ff);
-      color: #fff;
       padding: 6px 16px;
       border-radius: 20px;
       font-size: 0.9rem;
-      box-shadow: 0 6px 18px rgba(41,121,255,0.45);
-      animation: pulse 1.4s infinite;
-      z-index: 999;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.35);
       display: none;
+      z-index: 999;
+      color: white;
+    }
+
+    #thinking {
+      background: linear-gradient(135deg, #ff9800, #ffb300);
+    }
+
+    #typing {
+      background: linear-gradient(135deg, #2979ff, #00b0ff);
+      animation: pulse 1.2s infinite;
     }
 
     @keyframes pulse {
@@ -110,95 +122,112 @@
     }
 
     button {
-      padding: 10px 18px;
+      padding: 10px 20px;
       font-size: 16px;
       cursor: pointer;
-      background: #0a2a43;
+      background: linear-gradient(135deg, #00c853, #64dd17);
       color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
+      font-weight: bold;
     }
 
     button:hover {
-      background: #133e7c;
+      opacity: 0.9;
     }
+
+    /* ================= ALARM HIGHLIGHT ================= */
+    .alarm { color: #d32f2f; font-weight: bold; }
+    .warning { color: #f57c00; font-weight: bold; }
+    .ok { color: #2e7d32; font-weight: bold; }
   </style>
 </head>
 
 <body>
 
-  <header>NIDAAN AI</header>
+<header>NIDAAN AI</header>
 
-  <div class="chat-area" id="chatArea">
-    <div class="message ai">
-      Hello 👋 I’m <b>NIDAAN AI</b> — your intelligent SS Rig assistant.<br>
-      How may I help you?
-    </div>
+<div class="chat-area" id="chat">
+  <div class="message ai">
+    Hello 👋 I’m <b>NIDAAN AI</b> — your intelligent SS Rig assistant.
+    <div class="timestamp">--:--</div>
   </div>
+</div>
 
-  <!-- FLOATING TYPING -->
-  <div id="typing-indicator">NIDAAN AI is typing…</div>
+<div id="thinking" class="status">NIDAAN AI is thinking…</div>
+<div id="typing" class="status">NIDAAN AI is typing…</div>
 
-  <footer>
-    <input type="text" id="userInput" placeholder="Type your message...">
-    <button onclick="sendMessage()">Send</button>
-  </footer>
+<footer>
+  <input id="input" placeholder="Type your message...">
+  <button onclick="send()">Send</button>
+</footer>
 
-  <script>
-    const input = document.getElementById("userInput");
-    const chat = document.getElementById("chatArea");
-    const typingIndicator = document.getElementById("typing-indicator");
+<script>
+const chat = document.getElementById("chat");
+const input = document.getElementById("input");
+const thinking = document.getElementById("thinking");
+const typing = document.getElementById("typing");
 
-    input.addEventListener("keydown", function (e) {
-      if (e.key === "Enter") sendMessage();
-    });
+input.addEventListener("keydown", e => {
+  if (e.key === "Enter") send();
+});
 
-    function scrollToBottom() {
+function timeNow() {
+  return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+}
+
+function highlight(text) {
+  return text
+    .replace(/(ALARM|FAULT|TRIP)/gi, '<span class="alarm">$1</span>')
+    .replace(/(WARN|WARNING)/gi, '<span class="warning">$1</span>')
+    .replace(/(OK|NORMAL)/gi, '<span class="ok">$1</span>');
+}
+
+function send() {
+  const text = input.value.trim();
+  if (!text) return;
+
+  const u = document.createElement("div");
+  u.className = "message user";
+  u.innerHTML = text + `<div class="timestamp">${timeNow()}</div>`;
+  chat.appendChild(u);
+  chat.scrollTop = chat.scrollHeight;
+  input.value = "";
+
+  thinking.style.display = "block";
+
+  fetch("https://n8n-oazxlbnc.us-west-1.clawcloudrun.com/webhook/nidaan-chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message: text })
+  })
+  .then(r => r.json())
+  .then(d => {
+    thinking.style.display = "none";
+    typing.style.display = "block";
+
+    setTimeout(() => {
+      typing.style.display = "none";
+
+      const a = document.createElement("div");
+      a.className = "message ai";
+      a.innerHTML = highlight(d.reply || "No reply from AI") +
+        `<div class="timestamp">${timeNow()}</div>`;
+      chat.appendChild(a);
       chat.scrollTop = chat.scrollHeight;
-    }
+    }, 700);
+  })
+  .catch(() => {
+    thinking.style.display = "none";
+    typing.style.display = "none";
 
-    function sendMessage() {
-      const text = input.value.trim();
-      if (text === "") return;
-
-      // USER MESSAGE
-      const userMsg = document.createElement("div");
-      userMsg.className = "message user";
-      userMsg.innerText = text;
-      chat.appendChild(userMsg);
-
-      input.value = "";
-      scrollToBottom();
-
-      // SHOW TYPING
-      typingIndicator.style.display = "block";
-
-      fetch("https://n8n-oazxlbnc.us-west-1.clawcloudrun.com/webhook/nidaan-chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text })
-      })
-      .then(res => res.json())
-      .then(data => {
-        typingIndicator.style.display = "none";
-
-        const aiMsg = document.createElement("div");
-        aiMsg.className = "message ai";
-        aiMsg.innerText = data.reply || "No reply from AI";
-        chat.appendChild(aiMsg);
-        scrollToBottom();
-      })
-      .catch(() => {
-        typingIndicator.style.display = "none";
-
-        const errMsg = document.createElement("div");
-        errMsg.className = "message ai";
-        errMsg.innerText = "Error connecting to NIDAAN AI";
-        chat.appendChild(errMsg);
-        scrollToBottom();
-      });
-    }
-  </script>
+    const e = document.createElement("div");
+    e.className = "message ai";
+    e.innerText = "Error connecting to NIDAAN AI";
+    chat.appendChild(e);
+  });
+}
+</script>
 
 </body>
 </html>
