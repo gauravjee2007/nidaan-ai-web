@@ -122,15 +122,34 @@
       chat.scrollTop = chat.scrollHeight;
 
       // FAKE AI RESPONSE
-      setTimeout(() => {
-        typing.remove();
+      fetch("https://n8n-oazxlbnc.us-west-1.clawcloudrun.com/webhook/nidaan-chat", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    message: text
+  })
+})
+.then(res => res.json())
+.then(data => {
+  typing.remove();
 
-        const aiMsg = document.createElement("div");
-        aiMsg.className = "message ai";
-        aiMsg.innerText = "Got it 👍 (AI response will come here)";
-        chat.appendChild(aiMsg);
-        chat.scrollTop = chat.scrollHeight;
-      }, 1200);
+  const aiMsg = document.createElement("div");
+  aiMsg.className = "message ai";
+  aiMsg.innerText = data.reply || "No reply from AI";
+  chat.appendChild(aiMsg);
+  chat.scrollTop = chat.scrollHeight;
+})
+.catch(err => {
+  typing.remove();
+
+  const errMsg = document.createElement("div");
+  errMsg.className = "message ai";
+  errMsg.innerText = "Error connecting to NIDAAN AI";
+  chat.appendChild(errMsg);
+});
+
     }
   </script>
 
