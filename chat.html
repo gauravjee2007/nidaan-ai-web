@@ -3,162 +3,121 @@
 <head>
 <meta charset="UTF-8">
 <title>NIDAAN AI – Chat</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-  * {
-    box-sizing: border-box;
-    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  }
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
 
-  body {
-    margin: 0;
-    background: #f0f2f5;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-  }
+body {
+  margin: 0;
+  background: #f0f2f5;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
 
-  /* HEADER */
-  header {
-    background: linear-gradient(135deg, #0b2a44, #1f3b57);
-    color: white;
-    text-align: center;
-    padding: 22px;
-    font-size: 36px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
-  }
+/* HEADER */
+header {
+  background: linear-gradient(135deg, #0b2a44, #1f3b57);
+  color: white;
+  text-align: center;
+  padding: 22px;
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
 
-  /* CHAT AREA */
-  .chat-area {
-    flex: 1;
-    padding: 18px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
+/* CHAT */
+.chat-area {
+  flex: 1;
+  padding: 18px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
 
-  /* MESSAGE COMMON */
-  .message {
-    padding: 12px 16px;
-    border-radius: 12px;
-    max-width: 80%;
-    font-size: 17px;
-    line-height: 1.45;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    position: relative;
-  }
+.message {
+  padding: 12px 16px;
+  border-radius: 12px;
+  max-width: 80%;
+  font-size: 17px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
 
-  /* TIMESTAMP */
-  .time {
-    font-size: 12px;
-    opacity: 0.6;
-    margin-top: 6px;
-    text-align: right;
-  }
+.user {
+  align-self: flex-end;
+  background: linear-gradient(135deg, #4caf50, #2e7d32);
+  color: #fff;
+}
 
-  /* USER MESSAGE */
-  .user {
-    align-self: flex-end;
-    background: linear-gradient(135deg, #4caf50, #2e7d32); /* dark lime */
-    color: #ffffff;
-    border-bottom-right-radius: 4px;
-  }
+.ai {
+  align-self: flex-start;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(10px);
+  color: #000;
+}
 
-  /* AI MESSAGE – GLASSY METALLIC */
-  .ai {
-    align-self: flex-start;
-    background: rgba(255,255,255,0.65);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    color: #000;
-    border: 1px solid rgba(255,255,255,0.35);
-    border-bottom-left-radius: 4px;
-  }
+.thinking {
+  background: rgba(160,210,160,0.7);
+  font-weight: bold;
+}
 
-  /* THINKING */
-  .thinking {
-    background: rgba(170, 215, 170, 0.6);
-    font-weight: bold;
-  }
+.typing {
+  background: rgba(180,200,230,0.7);
+  font-weight: bold;
+}
 
-  /* TYPING */
-  .typing {
-    background: rgba(180, 200, 230, 0.6);
-    font-weight: bold;
-  }
+.time {
+  font-size: 12px;
+  opacity: 0.6;
+  margin-top: 6px;
+  text-align: right;
+}
 
-  /* DOT ANIMATION */
-  .dots::after {
-    content: "";
-    animation: dots 1.5s infinite;
-  }
+/* FOOTER */
+footer {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  background: #fff;
+  border-top: 1px solid #ccc;
+}
 
-  @keyframes dots {
-    0% { content: ""; }
-    33% { content: "."; }
-    66% { content: ".."; }
-    100% { content: "..."; }
-  }
+input {
+  flex: 1;
+  padding: 14px;
+  font-size: 17px;
+  border-radius: 10px;
+  border: 1px solid #bbb;
+  outline: none;
+}
 
-  /* FOOTER */
-  footer {
-    padding: 12px env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-    display: flex;
-    gap: 8px;
-    background: #ffffff;
-    border-top: 1px solid #ccc;
-  }
+button {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
 
-  input {
-    flex: 1;
-    padding: 14px;
-    font-size: 17px;
-    border-radius: 10px;
-    border: 1px solid #bbb;
-    outline: none;
-  }
+#sendBtn {
+  background: linear-gradient(135deg, #2f6fa3, #1c4f7a);
+  color: white;
+}
 
-  /* SEND BUTTON */
-  button {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    background: linear-gradient(135deg, #2f6fa3, #1c4f7a);
-    color: white;
-    opacity: 0.5;
-  }
+#micBtn {
+  background: linear-gradient(135deg, #555, #333);
+  color: white;
+}
 
-  button.active {
-    opacity: 1;
-  }
-
-  /* MIC BUTTON */
-  .mic {
-    background: linear-gradient(135deg, #444, #222);
-  }
-
-  .mic.listening {
-    background: linear-gradient(135deg, #e53935, #b71c1c);
-    opacity: 1;
-  }
-
-  @media (max-width: 600px) {
-    header {
-      font-size: 28px;
-      padding: 18px;
-    }
-    .message {
-      font-size: 16px;
-      max-width: 90%;
-    }
-  }
+#micBtn.listening {
+  background: linear-gradient(135deg, #e53935, #b71c1c);
+}
 </style>
 </head>
 
@@ -176,99 +135,110 @@
 
 <footer>
   <input id="userInput" type="text" placeholder="Type your query..." />
-  <button id="micBtn" class="mic">🎙</button>
+  <button id="micBtn">🎙</button>
   <button id="sendBtn">➤</button>
 </footer>
 
 <script>
-  const input = document.getElementById("userInput");
-  const chat = document.getElementById("chatArea");
-  const sendBtn = document.getElementById("sendBtn");
-  const micBtn = document.getElementById("micBtn");
+const input = document.getElementById("userInput");
+const chat = document.getElementById("chatArea");
+const sendBtn = document.getElementById("sendBtn");
+const micBtn = document.getElementById("micBtn");
 
-  function timeNow() {
-    const d = new Date();
-    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  }
+/* ---------- TIME ---------- */
+function now() {
+  return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+}
 
-  let recognition;
-  if ('webkitSpeechRecognition' in window) {
-    recognition = new webkitSpeechRecognition();
-    recognition.lang = "en-IN";
-    recognition.onresult = e => {
-      input.value = e.results[0][0].transcript;
-      sendBtn.classList.add("active");
-    };
-    recognition.onend = () => micBtn.classList.remove("listening");
-  } else {
-    micBtn.style.display = "none";
-  }
+/* ---------- FORCE TYPING ENABLE (FIX) ---------- */
+input.disabled = false;
+input.focus();
 
-  micBtn.onclick = () => {
-    micBtn.classList.add("listening");
-    recognition.start();
+/* ENTER KEY SEND */
+input.addEventListener("keydown", e => {
+  if (e.key === "Enter") sendMessage();
+});
+
+/* ---------- VOICE INPUT ---------- */
+let recognition;
+if ('webkitSpeechRecognition' in window) {
+  recognition = new webkitSpeechRecognition();
+  recognition.lang = "en-IN";
+  recognition.onresult = e => {
+    input.value = e.results[0][0].transcript;
+    input.focus();
   };
+  recognition.onend = () => micBtn.classList.remove("listening");
+}
 
-  input.oninput = () => sendBtn.classList.toggle("active", input.value.trim());
-  input.onkeydown = e => e.key === "Enter" && sendMessage();
-  sendBtn.onclick = sendMessage;
+micBtn.onclick = () => {
+  if (!recognition) return;
+  micBtn.classList.add("listening");
+  recognition.start();
+};
 
-  function sendMessage() {
-    const text = input.value.trim();
-    if (!text) return;
+/* ---------- AI VOICE OUTPUT ---------- */
+function speakAI(text) {
+  if (!window.speechSynthesis) return;
+  const msg = new SpeechSynthesisUtterance(text);
+  msg.lang = "en-IN";
+  msg.rate = 0.9;   // slow, senior technician feel
+  msg.pitch = 0.8;
+  const voices = speechSynthesis.getVoices();
+  const male = voices.find(v => v.lang === "en-IN" && v.name.toLowerCase().includes("male"));
+  if (male) msg.voice = male;
+  speechSynthesis.speak(msg);
+}
 
-    const userMsg = document.createElement("div");
-    userMsg.className = "message user";
-    userMsg.innerHTML = `${text}<div class="time">${timeNow()}</div>`;
-    chat.appendChild(userMsg);
+/* ---------- SEND MESSAGE ---------- */
+function sendMessage() {
+  const text = input.value.trim();
+  if (!text) return;
 
-    input.value = "";
-    sendBtn.classList.remove("active");
-    scrollDown();
+  const user = document.createElement("div");
+  user.className = "message user";
+  user.innerHTML = `${text}<div class="time">${now()}</div>`;
+  chat.appendChild(user);
 
-    const thinking = document.createElement("div");
-    thinking.className = "message ai thinking dots";
-    thinking.innerText = "NIDAAN AI is thinking";
-    chat.appendChild(thinking);
-    scrollDown();
+  input.value = "";
+  chat.scrollTop = chat.scrollHeight;
 
-    setTimeout(() => {
-      thinking.remove();
+  const thinking = document.createElement("div");
+  thinking.className = "message ai thinking";
+  thinking.textContent = "NIDAAN AI is thinking...";
+  chat.appendChild(thinking);
+  chat.scrollTop = chat.scrollHeight;
 
-      const typing = document.createElement("div");
-      typing.className = "message ai typing dots";
-      typing.innerText = "NIDAAN AI is typing";
-      chat.appendChild(typing);
-      scrollDown();
+  setTimeout(() => {
+    thinking.remove();
 
-      fetch("https://n8n-oazxlbnc.us-west-1.clawcloudrun.com/webhook/nidaan-chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text })
-      })
-      .then(r => r.json())
-      .then(d => {
-        typing.remove();
-        const aiMsg = document.createElement("div");
-        aiMsg.className = "message ai";
-        aiMsg.innerHTML = `${d.reply || "No reply from AI"}<div class="time">${timeNow()}</div>`;
-        chat.appendChild(aiMsg);
-        scrollDown();
-      })
-      .catch(() => {
-        typing.remove();
-        const err = document.createElement("div");
-        err.className = "message ai";
-        err.innerHTML = `Error connecting to NIDAAN AI<div class="time">${timeNow()}</div>`;
-        chat.appendChild(err);
-        scrollDown();
-      });
-    }, 1200); // thinking time increased
-  }
-
-  function scrollDown() {
+    const typing = document.createElement("div");
+    typing.className = "message ai typing";
+    typing.textContent = "NIDAAN AI is typing...";
+    chat.appendChild(typing);
     chat.scrollTop = chat.scrollHeight;
-  }
+
+    fetch("https://n8n-oazxlbnc.us-west-1.clawcloudrun.com/webhook/nidaan-chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: text })
+    })
+    .then(r => r.json())
+    .then(d => {
+      typing.remove();
+      const ai = document.createElement("div");
+      ai.className = "message ai";
+      ai.innerHTML = `${d.reply}<div class="time">${now()}</div>`;
+      chat.appendChild(ai);
+      chat.scrollTop = chat.scrollHeight;
+
+      speakAI(d.reply); // 🔊 AI VOICE REPLY
+    })
+    .catch(() => {
+      typing.remove();
+    });
+  }, 1400);
+}
 </script>
 
 </body>
