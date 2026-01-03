@@ -6,131 +6,129 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-* {
-  box-sizing: border-box;
-  font-family: Calibri, Arial, sans-serif;
+*{
+  box-sizing:border-box;
+  font-family:Calibri,Arial,sans-serif;
 }
 
-body {
-  margin: 0;
-  background: #f4f6f8;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
+body{
+  margin:0;
+  background:#f4f6f8;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
 }
 
-/* ===== HEADER ===== */
-header {
-  background: linear-gradient(180deg,#2c3e50,#1b2b3a);
-  color: #fff;
-  padding: 22px;
-  text-align: center;
-  font-size: 32px;
-  font-weight: 700;
-  letter-spacing: 2px;
+/* HEADER */
+header{
+  background:linear-gradient(180deg,#2c3e50,#1b2b3a);
+  color:#fff;
+  padding:22px;
+  text-align:center;
+  font-size:34px;
+  font-weight:700;
+  letter-spacing:2px;
 }
 
-/* ===== CHAT AREA ===== */
-.chat-area {
-  flex: 1;
-  padding: 18px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+/* CHAT */
+.chat-area{
+  flex:1;
+  padding:18px;
+  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
 }
 
-/* ===== MESSAGE COMMON ===== */
-.message {
-  max-width: 78%;
-  padding: 14px 16px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,.08);
-  font-size: 16px;
-  line-height: 1.5;
-  position: relative;
+/* MESSAGE COMMON */
+.message{
+  max-width:78%;
+  padding:14px 16px;
+  border-radius:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+  font-size:16px;
+  line-height:1.5;
+  color:#000;
 }
 
-/* ===== USER ===== */
-.user {
-  align-self: flex-end;
-  background: #5fae4e;
-  color: #fff;
+/* USER — SAME GREEN AS SCREENSHOT */
+.user{
+  align-self:flex-end;
+  background:#5fae4e;   /* ✅ SAME USER GREEN */
+  color:#fff;
 }
 
-/* ===== AI ===== */
-.ai {
-  align-self: flex-start;
-  background: #ffffff;
-  color: #000;
+/* AI */
+.ai{
+  align-self:flex-start;
+  background:#ffffff;
 }
 
-/* ===== TIMESTAMP ===== */
-.time {
-  font-size: 11px;
-  opacity: .6;
-  margin-top: 6px;
-  text-align: right;
+/* TIMESTAMP */
+.time{
+  font-size:11px;
+  opacity:.6;
+  margin-top:6px;
+  text-align:right;
 }
 
-/* ===== THINKING / TYPING ===== */
-.thinking {
-  background: #e4f6ea;
-  font-weight: bold;
-  color: #000;
+/* THINKING / TYPING */
+.thinking{
+  background:#d9f0e2;  /* light green */
+  font-weight:bold;
 }
 
-.typing {
-  background: #e9eef3;
-  font-weight: bold;
-  color: #000;
+.typing{
+  background:#cfd6dd;  /* 🔥 DARKER so clearly visible */
+  font-weight:bold;
 }
 
-/* ===== INPUT AREA ===== */
-footer {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px;
-  background: #ffffff;
-  border-top: 1px solid #ccc;
+/* INPUT BAR */
+footer{
+  display:flex;
+  gap:10px;
+  padding:12px;
+  background:#fff;
+  border-top:1px solid #ccc;
 }
 
-input {
-  flex: 1;
-  padding: 12px 14px;
-  font-size: 16px;
-  border-radius: 22px;
-  border: 1px solid #bbb;
+input{
+  flex:1;
+  padding:12px 14px;
+  font-size:16px;
+  border-radius:22px;
+  border:1px solid #bbb;
 }
 
-/* ===== SEND BUTTON ===== */
-button {
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  border: none;
-  background: linear-gradient(180deg,#3c6fa3,#2b4f73);
-  color: white;
-  font-size: 18px;
-  cursor: pointer;
+/* BUTTONS */
+button{
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  border:none;
+  font-size:18px;
+  cursor:pointer;
+  color:white;
 }
 
-button:disabled {
-  background: #b5b5b5;
-  cursor: not-allowed;
+button.send{
+  background:linear-gradient(180deg,#3c6fa3,#2b4f73);
 }
 
-/* ===== MIC ===== */
-.mic {
-  background: #e0e0e0;
-  color: #000;
+button.send:disabled{
+  background:#b5b5b5;
+  cursor:not-allowed;
 }
 
-/* ===== HIGHLIGHT ALARMS ===== */
-.highlight {
-  color: #c0392b;
-  font-weight: bold;
+button.mic{
+  background:#e0e0e0;
+  color:#000;
+}
+
+/* ALARM HIGHLIGHT */
+.highlight{
+  color:#c0392b;
+  font-weight:bold;
 }
 </style>
 </head>
@@ -144,60 +142,59 @@ button:disabled {
 <footer>
   <input id="input" placeholder="Type your query..." />
   <button class="mic" onclick="startVoice()">🎤</button>
-  <button id="sendBtn" onclick="sendMessage()" disabled>➤</button>
+  <button id="sendBtn" class="send" onclick="sendMessage()" disabled>➤</button>
 </footer>
 
 <script>
-const chat = document.getElementById("chat");
-const input = document.getElementById("input");
-const sendBtn = document.getElementById("sendBtn");
+const chat=document.getElementById("chat");
+const input=document.getElementById("input");
+const sendBtn=document.getElementById("sendBtn");
 
-/* ===== LOGIN ===== */
-if (!localStorage.getItem("nidaanUser")) {
-  const u = prompt("Enter User ID:");
-  localStorage.setItem("nidaanUser", u || "Guest");
+/* LOGIN */
+if(!localStorage.getItem("nidaanUser")){
+  localStorage.setItem("nidaanUser",prompt("Enter User ID")||"Guest");
 }
 
-/* ===== ENABLE SEND ===== */
-input.addEventListener("input", () => {
-  sendBtn.disabled = input.value.trim() === "";
+/* ENABLE SEND */
+input.addEventListener("input",()=>{
+  sendBtn.disabled=input.value.trim()==="";
 });
 
-/* ===== WELCOME (BOTTOM) ===== */
+/* WELCOME (BOTTOM) */
 addAI("Hello 👋 I’m NIDAAN AI — your intelligent SS Rig assistant.<br>How may I help you?");
 
-/* ===== SEND MESSAGE ===== */
-function sendMessage() {
-  const text = input.value.trim();
-  if (!text) return;
+/* SEND */
+function sendMessage(){
+  const text=input.value.trim();
+  if(!text)return;
 
   addUser(text);
-  input.value = "";
-  sendBtn.disabled = true;
+  input.value="";
+  sendBtn.disabled=true;
 
-  const thinking = addStatus("NIDAAN AI is thinking...", "thinking");
+  const think=addStatus("NIDAAN AI is thinking...","thinking");
 
-  fetch("https://n8n-oazxlbnc.us-west-1.clawcloudrun.com/webhook/nidaan-chat", {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({ message: text })
+  fetch("https://n8n-oazxlbnc.us-west-1.clawcloudrun.com/webhook/nidaan-chat",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({message:text})
   })
-  .then(r => r.json())
-  .then(d => {
-    thinking.remove();
-    const typing = addStatus("NIDAAN AI is typing...", "typing");
+  .then(r=>r.json())
+  .then(d=>{
+    think.remove();
+    const type=addStatus("NIDAAN AI is typing...","typing");
     setTimeout(()=>{
-      typing.remove();
-      addAI(formatText(d.reply || "No reply from AI"));
+      type.remove();
+      addAI(format(d.reply||"No reply from AI"));
     },600);
   })
   .catch(()=>{
-    thinking.remove();
+    think.remove();
     addAI("Error connecting to NIDAAN AI");
   });
 }
 
-/* ===== HELPERS ===== */
+/* HELPERS */
 function addUser(t){
   const d=document.createElement("div");
   d.className="message user";
@@ -228,21 +225,25 @@ function addStatus(t,c){
 function time(){
   const s=document.createElement("div");
   s.className="time";
-  s.innerText=new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+  s.innerText=new Date().toLocaleTimeString([],{
+    hour:'2-digit',minute:'2-digit'
+  });
   return s;
 }
 
-/* ===== ALARM HIGHLIGHT ===== */
-function formatText(t){
+function format(t){
   return t.replace(/\b(ALM|ESD|TRIP|FAULT)\b/g,
     '<span class="highlight">$1</span>');
 }
 
-/* ===== VOICE INPUT ===== */
+/* VOICE INPUT */
 function startVoice(){
   const r=new (window.SpeechRecognition||window.webkitSpeechRecognition)();
   r.lang="en-IN";
-  r.onresult=e=>{input.value=e.results[0][0].transcript; sendBtn.disabled=false;}
+  r.onresult=e=>{
+    input.value=e.results[0][0].transcript;
+    sendBtn.disabled=false;
+  };
   r.start();
 }
 </script>
