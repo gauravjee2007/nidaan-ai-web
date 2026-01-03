@@ -17,10 +17,12 @@ body {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  transition: background 0.3s;
 }
 
-/* METALLIC HEADER (NO CHANGE) */
+/* ================= HEADER ================= */
 header {
+  position: relative;
   background: linear-gradient(
     90deg,
     #0b1e2d 0%,
@@ -40,7 +42,22 @@ header {
   letter-spacing: 2px;
 }
 
-/* CHAT AREA */
+/* 🌙 DARK MODE TOGGLE */
+#darkToggle {
+  position: absolute;
+  right: 18px;
+  top: 18px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+}
+
+/* ================= CHAT ================= */
 .chat-area {
   flex: 1;
   padding: 18px;
@@ -48,6 +65,7 @@ header {
   display: flex;
   flex-direction: column;
   gap: 14px;
+  transition: background 0.3s;
 }
 
 .message {
@@ -59,14 +77,14 @@ header {
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
-/* ✅ USER – FOREST GREEN (CHANGE 1) */
+/* USER – Forest Green (unchanged) */
 .user {
   align-self: flex-end;
-  background: #228B22; /* Forest Green */
+  background: #228B22;
   color: #ffffff;
 }
 
-/* AI – GLASS METALLIC (NO CHANGE) */
+/* AI – Light */
 .ai {
   align-self: flex-start;
   background: rgba(255,255,255,0.78);
@@ -74,7 +92,7 @@ header {
   color: #000;
 }
 
-/* THINKING / TYPING (NO CHANGE) */
+/* THINKING / TYPING */
 .thinking {
   background: rgba(160, 220, 160, 0.95);
   font-weight: bold;
@@ -93,13 +111,14 @@ header {
   text-align: right;
 }
 
-/* FOOTER */
+/* ================= FOOTER ================= */
 footer {
   display: flex;
   gap: 10px;
   padding: 12px;
   background: #ffffff;
   border-top: 1px solid #ccc;
+  transition: background 0.3s;
 }
 
 input {
@@ -133,14 +152,49 @@ button {
 #micBtn.listening {
   background: linear-gradient(135deg, #e53935, #b71c1c);
 }
+
+/* ================= DARK MODE ================= */
+body.dark {
+  background: #121212;
+}
+
+body.dark .chat-area {
+  background: #121212;
+}
+
+body.dark footer {
+  background: #1e1e1e;
+  border-top: 1px solid #333;
+}
+
+body.dark input {
+  background: #2a2a2a;
+  color: #fff;
+  border: 1px solid #444;
+}
+
+body.dark .ai {
+  background: rgba(40,40,40,0.9);
+  color: #f1f1f1;
+}
+
+body.dark .thinking {
+  background: rgba(90,130,90,0.95);
+}
+
+body.dark .typing {
+  background: rgba(80,100,140,0.95);
+}
 </style>
 </head>
 
 <body>
 
-<header>NIDAAN AI</header>
+<header>
+  NIDAAN AI
+  <button id="darkToggle">🌙</button>
+</header>
 
-<!-- ✅ Welcome message moved INTO chat area (CHANGE 2) -->
 <div class="chat-area" id="chatArea">
   <div class="message ai">
     Hello 👋 I’m <b>NIDAAN AI</b> — your intelligent SS Rig assistant.<br>
@@ -160,15 +214,33 @@ const input = document.getElementById("userInput");
 const chat = document.getElementById("chatArea");
 const sendBtn = document.getElementById("sendBtn");
 const micBtn = document.getElementById("micBtn");
+const darkToggle = document.getElementById("darkToggle");
 
+/* ========== DARK MODE LOGIC ========== */
+const savedMode = localStorage.getItem("darkMode");
+if (savedMode === "on") {
+  document.body.classList.add("dark");
+  darkToggle.textContent = "☀";
+}
+
+darkToggle.onclick = () => {
+  document.body.classList.toggle("dark");
+  const dark = document.body.classList.contains("dark");
+  darkToggle.textContent = dark ? "☀" : "🌙";
+  localStorage.setItem("darkMode", dark ? "on" : "off");
+};
+
+/* TIME */
 function now() {
   return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
 }
 
+/* ENTER SEND */
 input.addEventListener("keydown", e => {
   if (e.key === "Enter") sendMessage();
 });
 
+/* VOICE INPUT ONLY */
 let recognition;
 if ('webkitSpeechRecognition' in window) {
   recognition = new webkitSpeechRecognition();
@@ -188,6 +260,7 @@ micBtn.onclick = () => {
 
 sendBtn.onclick = () => sendMessage();
 
+/* SEND MESSAGE */
 function sendMessage() {
   const text = input.value.trim();
   if (!text) return;
