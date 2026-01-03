@@ -19,7 +19,7 @@ body {
   height: 100vh;
 }
 
-/* 🔵 METALLIC HEADER */
+/* METALLIC HEADER (NO CHANGE) */
 header {
   background: linear-gradient(
     90deg,
@@ -59,14 +59,14 @@ header {
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
-/* 🟢 USER – HARLEQUIN GREEN */
+/* ✅ USER – FOREST GREEN (CHANGE 1) */
 .user {
   align-self: flex-end;
-  background: linear-gradient(135deg, #3fff00, #2ecc71);
+  background: #228B22; /* Forest Green */
   color: #ffffff;
 }
 
-/* 🤖 AI – GLASS METALLIC */
+/* AI – GLASS METALLIC (NO CHANGE) */
 .ai {
   align-self: flex-start;
   background: rgba(255,255,255,0.78);
@@ -74,7 +74,7 @@ header {
   color: #000;
 }
 
-/* THINKING / TYPING */
+/* THINKING / TYPING (NO CHANGE) */
 .thinking {
   background: rgba(160, 220, 160, 0.95);
   font-weight: bold;
@@ -102,7 +102,6 @@ footer {
   border-top: 1px solid #ccc;
 }
 
-/* INPUT */
 input {
   flex: 1;
   padding: 14px;
@@ -112,7 +111,6 @@ input {
   outline: none;
 }
 
-/* BUTTONS */
 button {
   width: 54px;
   height: 54px;
@@ -122,20 +120,16 @@ button {
   cursor: pointer;
 }
 
-/* SEND – FIXED & ACTIVE */
 #sendBtn {
   background: linear-gradient(135deg, #2f6fa3, #1c4f7a);
   color: #fff;
 }
-#sendBtn:hover {
-  filter: brightness(1.15);
-}
 
-/* MIC */
 #micBtn {
   background: linear-gradient(135deg, #555, #333);
   color: white;
 }
+
 #micBtn.listening {
   background: linear-gradient(135deg, #e53935, #b71c1c);
 }
@@ -146,6 +140,7 @@ button {
 
 <header>NIDAAN AI</header>
 
+<!-- ✅ Welcome message moved INTO chat area (CHANGE 2) -->
 <div class="chat-area" id="chatArea">
   <div class="message ai">
     Hello 👋 I’m <b>NIDAAN AI</b> — your intelligent SS Rig assistant.<br>
@@ -166,17 +161,14 @@ const chat = document.getElementById("chatArea");
 const sendBtn = document.getElementById("sendBtn");
 const micBtn = document.getElementById("micBtn");
 
-/* TIME */
 function now() {
   return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
 }
 
-/* ENTER KEY */
 input.addEventListener("keydown", e => {
   if (e.key === "Enter") sendMessage();
 });
 
-/* VOICE INPUT ONLY */
 let recognition;
 if ('webkitSpeechRecognition' in window) {
   recognition = new webkitSpeechRecognition();
@@ -194,7 +186,6 @@ micBtn.onclick = () => {
   recognition.start();
 };
 
-/* SEND BUTTON FIX */
 sendBtn.onclick = () => sendMessage();
 
 function sendMessage() {
