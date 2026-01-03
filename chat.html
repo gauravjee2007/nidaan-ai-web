@@ -1,251 +1,224 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>NIDAAN AI – Assistant</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>NIDAAN AI – Chat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-*{
-  box-sizing:border-box;
-  font-family:Calibri,Arial,sans-serif;
-}
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Calibri, "Times New Roman", serif;
+    }
 
-body{
-  margin:0;
-  background:#f4f6f8;
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-}
+    body {
+      margin: 0;
+      background: #f4f6f8;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
 
-/* HEADER */
-header{
-  background:linear-gradient(180deg,#2c3e50,#1b2b3a);
-  color:#fff;
-  padding:22px;
-  text-align:center;
-  font-size:34px;
-  font-weight:700;
-  letter-spacing:2px;
-}
+    /* HEADER */
+    header {
+      background: linear-gradient(135deg, #0b2a44, #1f3b57);
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    }
 
-/* CHAT */
-.chat-area{
-  flex:1;
-  padding:18px;
-  overflow-y:auto;
-  display:flex;
-  flex-direction:column;
-  gap:14px;
-}
+    /* CHAT AREA */
+    .chat-area {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
 
-/* MESSAGE COMMON */
-.message{
-  max-width:78%;
-  padding:14px 16px;
-  border-radius:12px;
-  box-shadow:0 4px 12px rgba(0,0,0,.08);
-  font-size:16px;
-  line-height:1.5;
-  color:#000;
-}
+    /* MESSAGE COMMON */
+    .message {
+      padding: 14px 18px;
+      border-radius: 14px;
+      max-width: 80%;
+      font-size: 18px;
+      line-height: 1.5;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+    }
 
-/* USER — SAME GREEN AS SCREENSHOT */
-.user{
-  align-self:flex-end;
-  background:#5fae4e;   /* ✅ SAME USER GREEN */
-  color:#fff;
-}
+    /* USER MESSAGE (GREEN – AS REQUESTED) */
+    .user {
+      align-self: flex-end;
+      background: #5aa357;
+      color: #ffffff;
+      width: 100%;
+      max-width: 100%;
+      font-size: 22px;
+      font-weight: 500;
+    }
 
-/* AI */
-.ai{
-  align-self:flex-start;
-  background:#ffffff;
-}
+    /* AI MESSAGE */
+    .ai {
+      align-self: flex-start;
+      background: #ffffff;
+      color: #000;
+    }
 
-/* TIMESTAMP */
-.time{
-  font-size:11px;
-  opacity:.6;
-  margin-top:6px;
-  text-align:right;
-}
+    /* THINKING */
+    .thinking {
+      background: #cfe8cf;
+      font-weight: bold;
+      color: #000;
+    }
 
-/* THINKING / TYPING */
-.thinking{
-  background:#d9f0e2;  /* light green */
-  font-weight:bold;
-}
+    /* TYPING */
+    .typing {
+      background: #b6d7b6;
+      font-weight: bold;
+      color: #000;
+    }
 
-.typing{
-  background:#cfd6dd;  /* 🔥 DARKER so clearly visible */
-  font-weight:bold;
-}
+    /* FOOTER */
+    footer {
+      padding: 12px;
+      display: flex;
+      gap: 10px;
+      border-top: 1px solid #ccc;
+      background: #fff;
+    }
 
-/* INPUT BAR */
-footer{
-  display:flex;
-  gap:10px;
-  padding:12px;
-  background:#fff;
-  border-top:1px solid #ccc;
-}
+    input {
+      flex: 1;
+      padding: 14px;
+      font-size: 18px;
+      border-radius: 10px;
+      border: 1px solid #bbb;
+      outline: none;
+    }
 
-input{
-  flex:1;
-  padding:12px 14px;
-  font-size:16px;
-  border-radius:22px;
-  border:1px solid #bbb;
-}
+    /* SEND BUTTON */
+    button {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      border: none;
+      background: linear-gradient(135deg, #2f6fa3, #1c4f7a);
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      opacity: 0.4;
+    }
 
-/* BUTTONS */
-button{
-  width:46px;
-  height:46px;
-  border-radius:50%;
-  border:none;
-  font-size:18px;
-  cursor:pointer;
-  color:white;
-}
-
-button.send{
-  background:linear-gradient(180deg,#3c6fa3,#2b4f73);
-}
-
-button.send:disabled{
-  background:#b5b5b5;
-  cursor:not-allowed;
-}
-
-button.mic{
-  background:#e0e0e0;
-  color:#000;
-}
-
-/* ALARM HIGHLIGHT */
-.highlight{
-  color:#c0392b;
-  font-weight:bold;
-}
-</style>
+    button.active {
+      opacity: 1;
+    }
+  </style>
 </head>
 
 <body>
 
 <header>NIDAAN AI</header>
 
-<div class="chat-area" id="chat"></div>
+<div class="chat-area" id="chatArea">
+  <!-- Welcome Message at Bottom -->
+  <div class="message ai">
+    Hello 👋 I’m <b>NIDAAN AI</b> — your intelligent SS Rig assistant.<br>
+    How may I help you?
+  </div>
+</div>
 
 <footer>
-  <input id="input" placeholder="Type your query..." />
-  <button class="mic" onclick="startVoice()">🎤</button>
-  <button id="sendBtn" class="send" onclick="sendMessage()" disabled>➤</button>
+  <input
+    type="text"
+    id="userInput"
+    placeholder="Type your query..."
+  />
+  <button id="sendBtn">➤</button>
 </footer>
 
 <script>
-const chat=document.getElementById("chat");
-const input=document.getElementById("input");
-const sendBtn=document.getElementById("sendBtn");
+  const input = document.getElementById("userInput");
+  const chat = document.getElementById("chatArea");
+  const sendBtn = document.getElementById("sendBtn");
 
-/* LOGIN */
-if(!localStorage.getItem("nidaanUser")){
-  localStorage.setItem("nidaanUser",prompt("Enter User ID")||"Guest");
-}
-
-/* ENABLE SEND */
-input.addEventListener("input",()=>{
-  sendBtn.disabled=input.value.trim()==="";
-});
-
-/* WELCOME (BOTTOM) */
-addAI("Hello 👋 I’m NIDAAN AI — your intelligent SS Rig assistant.<br>How may I help you?");
-
-/* SEND */
-function sendMessage(){
-  const text=input.value.trim();
-  if(!text)return;
-
-  addUser(text);
-  input.value="";
-  sendBtn.disabled=true;
-
-  const think=addStatus("NIDAAN AI is thinking...","thinking");
-
-  fetch("https://n8n-oazxlbnc.us-west-1.clawcloudrun.com/webhook/nidaan-chat",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({message:text})
-  })
-  .then(r=>r.json())
-  .then(d=>{
-    think.remove();
-    const type=addStatus("NIDAAN AI is typing...","typing");
-    setTimeout(()=>{
-      type.remove();
-      addAI(format(d.reply||"No reply from AI"));
-    },600);
-  })
-  .catch(()=>{
-    think.remove();
-    addAI("Error connecting to NIDAAN AI");
+  // Enable button only if text present
+  input.addEventListener("input", () => {
+    sendBtn.classList.toggle("active", input.value.trim().length > 0);
   });
-}
 
-/* HELPERS */
-function addUser(t){
-  const d=document.createElement("div");
-  d.className="message user";
-  d.innerHTML=t;
-  d.appendChild(time());
-  chat.appendChild(d);
-  chat.scrollTop=chat.scrollHeight;
-}
-
-function addAI(t){
-  const d=document.createElement("div");
-  d.className="message ai";
-  d.innerHTML=t;
-  d.appendChild(time());
-  chat.appendChild(d);
-  chat.scrollTop=chat.scrollHeight;
-}
-
-function addStatus(t,c){
-  const d=document.createElement("div");
-  d.className="message "+c;
-  d.innerText=t;
-  chat.appendChild(d);
-  chat.scrollTop=chat.scrollHeight;
-  return d;
-}
-
-function time(){
-  const s=document.createElement("div");
-  s.className="time";
-  s.innerText=new Date().toLocaleTimeString([],{
-    hour:'2-digit',minute:'2-digit'
+  // ENTER = SEND
+  input.addEventListener("keydown", e => {
+    if (e.key === "Enter") sendMessage();
   });
-  return s;
-}
 
-function format(t){
-  return t.replace(/\b(ALM|ESD|TRIP|FAULT)\b/g,
-    '<span class="highlight">$1</span>');
-}
+  sendBtn.addEventListener("click", sendMessage);
 
-/* VOICE INPUT */
-function startVoice(){
-  const r=new (window.SpeechRecognition||window.webkitSpeechRecognition)();
-  r.lang="en-IN";
-  r.onresult=e=>{
-    input.value=e.results[0][0].transcript;
-    sendBtn.disabled=false;
-  };
-  r.start();
-}
+  function sendMessage() {
+    const text = input.value.trim();
+    if (!text) return;
+
+    // USER MESSAGE
+    const userMsg = document.createElement("div");
+    userMsg.className = "message user";
+    userMsg.innerText = text;
+    chat.appendChild(userMsg);
+
+    input.value = "";
+    sendBtn.classList.remove("active");
+    scrollDown();
+
+    // THINKING
+    const thinking = document.createElement("div");
+    thinking.className = "message ai thinking";
+    thinking.innerText = "NIDAAN AI is thinking...";
+    chat.appendChild(thinking);
+    scrollDown();
+
+    setTimeout(() => {
+      thinking.remove();
+
+      // TYPING
+      const typing = document.createElement("div");
+      typing.className = "message ai typing";
+      typing.innerText = "NIDAAN AI is typing...";
+      chat.appendChild(typing);
+      scrollDown();
+
+      fetch("https://n8n-oazxlbnc.us-west-1.clawcloudrun.com/webhook/nidaan-chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text })
+      })
+      .then(res => res.json())
+      .then(data => {
+        typing.remove();
+
+        const aiMsg = document.createElement("div");
+        aiMsg.className = "message ai";
+        aiMsg.innerText = data.reply || "No reply from AI";
+        chat.appendChild(aiMsg);
+        scrollDown();
+      })
+      .catch(() => {
+        typing.remove();
+        const err = document.createElement("div");
+        err.className = "message ai";
+        err.innerText = "Error connecting to NIDAAN AI";
+        chat.appendChild(err);
+        scrollDown();
+      });
+
+    }, 500);
+  }
+
+  function scrollDown() {
+    chat.scrollTop = chat.scrollHeight;
+  }
 </script>
 
 </body>
