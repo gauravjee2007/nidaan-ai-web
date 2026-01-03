@@ -14,12 +14,15 @@
       height: 100vh;
     }
 
-    header {
-      background: #0a2a43;
-      color: white;
-      padding: 12px;
-      text-align: center;
-      font-weight: bold;
+  header {
+  background: #0a2a43;
+  color: white;
+  padding: 18px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 20px;
+  letter-spacing: 1px;
+}
     }
 
 .chat-area {
@@ -39,6 +42,16 @@
       margin-bottom: 10px;
       box-shadow: 0 1px 4px rgba(0,0,0,0.1);
     }
+    .message.user {
+  background: #dcf8c6;
+  align-self: flex-end;
+}
+
+.message.ai {
+  background: #ffffff;
+  align-self: flex-start;
+}
+
 
     footer {
       padding: 10px;
@@ -71,7 +84,7 @@
 
   <!-- Chat messages -->
   <div class="chat-area">
-    <div class="message">
+    <div class="message ai">
       Hello 👋 I’m <b>NIDAAN AI</b> — your intelligent SS Rig assistant.<br>
       How may I help you?
     </div>
@@ -83,27 +96,61 @@
 <button onclick="sendMessage()">Send</button>
   </footer>
   <script>
+    <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const input = document.getElementById("userInput");
+    input.addEventListener("keypress", function (e) {
+      if (e.key === "Enter") {
+        sendMessage();
+      }
+    });
+  });
+
+ <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const input = document.getElementById("userInput");
+    input.addEventListener("keypress", function (e) {
+      if (e.key === "Enter") {
+        sendMessage();
+      }
+    });
+  });
+
   function sendMessage() {
     const input = document.getElementById("userInput");
-    const messageText = input.value.trim();
+    const text = input.value.trim();
+    if (text === "") return;
 
-    if (messageText === "") return;
+    const chat = document.querySelector(".chat-area");
 
-    const chatArea = document.querySelector(".chat-area");
+    // USER MESSAGE (RIGHT)
+    const userMsg = document.createElement("div");
+    userMsg.className = "message user";
+    userMsg.innerText = text;
+    chat.appendChild(userMsg);
 
-    // Create message bubble
-    const msgDiv = document.createElement("div");
-    msgDiv.className = "message";
-    msgDiv.innerText = messageText;
-
-    chatArea.appendChild(msgDiv);
-
-    // Clear input
     input.value = "";
+    chat.scrollTop = chat.scrollHeight;
 
-    // Scroll to bottom
-    chatArea.scrollTop = chatArea.scrollHeight;
+    // TYPING INDICATOR (LEFT)
+    const typing = document.createElement("div");
+    typing.className = "message ai";
+    typing.innerText = "NIDAAN AI is typing...";
+    chat.appendChild(typing);
+    chat.scrollTop = chat.scrollHeight;
+
+    // FAKE AI RESPONSE (abhi ke liye)
+    setTimeout(() => {
+      typing.remove();
+
+      const aiMsg = document.createElement("div");
+      aiMsg.className = "message ai";
+      aiMsg.innerText = "Got it 👍 (AI response will come here)";
+      chat.appendChild(aiMsg);
+      chat.scrollTop = chat.scrollHeight;
+    }, 1200);
   }
 </script>
+
 </body>
 </html>
