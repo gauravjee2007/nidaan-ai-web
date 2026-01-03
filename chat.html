@@ -6,115 +6,140 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-:root{
-  --metal-blue: linear-gradient(135deg,#0a2a43,#1e4d6b,#0a2a43);
-  --metal-green: linear-gradient(135deg,#4caf50,#6fdc6f,#3e9142);
-  --metal-grey: linear-gradient(135deg,#9e9e9e,#cfcfcf);
+* {
+  box-sizing: border-box;
+  font-family: "Times New Roman", serif;
 }
 
-body{
-  margin:0;
-  font-family:Segoe UI,Arial,sans-serif;
-  background:#f4f6f8;
-  height:100vh;
-  display:flex;
-  flex-direction:column;
+body {
+  margin: 0;
+  background: #f4f6f8;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-/* HEADER */
-header{
-  background:var(--metal-blue);
-  color:#fff;
-  padding:22px;
-  text-align:center;
-  font-size:32px;
-  font-weight:800;
-  letter-spacing:2px;
-  box-shadow:0 4px 12px rgba(0,0,0,.4);
+/* ===== HEADER ===== */
+header {
+  background: linear-gradient(135deg, #0a2a43, #1c3f5f);
+  color: white;
+  text-align: center;
+  padding: 18px;
+  font-size: 30px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  box-shadow: inset 0 -2px 6px rgba(255,255,255,0.15);
 }
 
-/* CHAT AREA */
-.chat-area{
-  flex:1;
-  padding:16px;
-  overflow-y:auto;
-  display:flex;
-  flex-direction:column;
+/* ===== CHAT AREA ===== */
+.chat-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
-/* MESSAGE COMMON */
-.message{
-  max-width:78%;
-  padding:12px 14px;
-  margin-bottom:14px;
-  border-radius:14px;
-  box-shadow:0 4px 10px rgba(0,0,0,.15);
-  line-height:1.45;
-  word-wrap:break-word;
+/* ===== MESSAGE BASE ===== */
+.message {
+  max-width: 80%;
+  padding: 14px 16px;
+  border-radius: 14px;
+  margin-bottom: 14px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+  line-height: 1.5;
+  position: relative;
+  word-wrap: break-word;
+  font-size: 17px;
 }
 
-.ai{
-  background:#fff;
-  align-self:flex-start;
+/* ===== AI MESSAGE ===== */
+.message.ai {
+  background: linear-gradient(145deg, #ffffff, #eef3f8);
+  align-self: flex-start;
 }
 
-.user{
-  background:var(--metal-green);
-  color:#fff;
-  align-self:flex-end;
+/* ===== USER MESSAGE ===== */
+.message.user {
+  background: #7ed957;
+  color: #083d14;
+  align-self: flex-end;
 }
 
-.time{
-  font-size:11px;
-  opacity:.6;
-  margin-top:4px;
-  text-align:right;
+/* ===== TIMESTAMP ===== */
+.timestamp {
+  font-size: 12px;
+  color: #777;
+  margin-top: 6px;
+  text-align: right;
 }
 
-/* THINKING / TYPING */
-.status{
-  font-style:italic;
-  color:#4caf50;
-  background:#eef8ee;
+/* ===== THINKING & TYPING ===== */
+.thinking {
+  background: #d9f5e2;
+  color: #0a5c2c;
+  font-style: italic;
 }
 
-/* FOOTER */
-footer{
-  display:flex;
-  gap:10px;
-  padding:12px;
-  border-top:1px solid #ccc;
-  background:#fff;
+.typing {
+  background: #fff3cd;
+  color: #7a5a00;
+  font-style: italic;
 }
 
-input{
-  flex:1;
-  padding:12px;
-  font-size:16px;
-  border-radius:8px;
-  border:1px solid #ccc;
+/* ===== ALARM / CODE HIGHLIGHT ===== */
+.code {
+  color: #c1121f;
+  font-weight: bold;
 }
 
-button{
-  width:52px;
-  border:none;
-  border-radius:50%;
-  font-size:22px;
-  cursor:pointer;
-  background:var(--metal-grey);
-  color:#333;
-  transition:.3s;
+/* ===== FOOTER ===== */
+footer {
+  display: flex;
+  gap: 10px;
+  padding: 12px;
+  background: #ffffff;
+  border-top: 1px solid #ccc;
 }
 
-button.active{
-  background:var(--metal-green);
-  color:#fff;
+/* ===== INPUT ===== */
+input {
+  flex: 1;
+  padding: 14px;
+  font-size: 16px;
+  border-radius: 25px;
+  border: 1px solid #ccc;
+  outline: none;
 }
 
-/* ALARM / CODE HIGHLIGHT */
-.highlight{
-  color:#d32f2f;
-  font-weight:700;
+input::placeholder {
+  color: #999;
+}
+
+/* ===== SEND BUTTON ===== */
+button {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: none;
+  background: #bdbdbd;
+  cursor: not-allowed;
+  font-size: 20px;
+  color: white;
+}
+
+button.active {
+  background: linear-gradient(145deg, #5fbf00, #4ca800);
+  cursor: pointer;
+}
+
+/* ===== SCROLLBAR ===== */
+.chat-area::-webkit-scrollbar {
+  width: 6px;
+}
+.chat-area::-webkit-scrollbar-thumb {
+  background: #aaa;
+  border-radius: 10px;
 }
 </style>
 </head>
@@ -123,99 +148,92 @@ button.active{
 
 <header>NIDAAN AI</header>
 
-<div class="chat-area" id="chat">
-  <div class="message ai">
-    Hello 👋 I’m <b>NIDAAN AI</b> — your intelligent SS Rig assistant.<br>
-    How may I help you?
-    <div class="time" id="startTime"></div>
-  </div>
-</div>
+<div class="chat-area" id="chatArea"></div>
 
 <footer>
-  <input id="input" placeholder="Type your query..." />
-  <button id="sendBtn" disabled>➤</button>
+  <input id="userInput" placeholder="Type your query..." />
+  <button id="sendBtn">➤</button>
 </footer>
 
 <script>
-const chat = document.getElementById("chat");
-const input = document.getElementById("input");
+const chat = document.getElementById("chatArea");
+const input = document.getElementById("userInput");
 const btn = document.getElementById("sendBtn");
 
-document.getElementById("startTime").innerText = timeNow();
-
-/* ENABLE SEND */
-input.addEventListener("input",()=>{
-  if(input.value.trim()){
+/* ===== ENABLE BUTTON ===== */
+input.addEventListener("input", () => {
+  if (input.value.trim()) {
     btn.classList.add("active");
-    btn.disabled=false;
-  }else{
+    btn.disabled = false;
+  } else {
     btn.classList.remove("active");
-    btn.disabled=true;
+    btn.disabled = true;
   }
 });
 
-input.addEventListener("keydown",e=>{
-  if(e.key==="Enter" && !btn.disabled) send();
+/* ===== ENTER KEY ===== */
+input.addEventListener("keydown", e => {
+  if (e.key === "Enter" && input.value.trim()) sendMessage();
 });
 
-btn.onclick = send;
+btn.onclick = sendMessage;
 
-function send(){
-  const text=input.value.trim();
-  if(!text) return;
+/* ===== TIME ===== */
+function timeNow() {
+  return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+}
 
-  addMsg(text,"user");
-  input.value="";
-  btn.disabled=true;
+/* ===== ADD MESSAGE ===== */
+function addMessage(text, type, cls="") {
+  const msg = document.createElement("div");
+  msg.className = `message ${type} ${cls}`;
+  msg.innerHTML = text.replace(/\b([A-Z]{2,}[-_]\d+)\b/g, `<span class="code">$1</span>`);
+  const t = document.createElement("div");
+  t.className = "timestamp";
+  t.innerText = timeNow();
+  msg.appendChild(t);
+  chat.appendChild(msg);
+  chat.scrollTop = chat.scrollHeight;
+  return msg;
+}
+
+/* ===== INITIAL WELCOME (BOTTOM) ===== */
+addMessage(
+  "Hello 👋 I’m <b>NIDAAN AI</b> — your intelligent SS Rig assistant.<br>How may I help you?",
+  "ai"
+);
+
+/* ===== SEND MESSAGE ===== */
+function sendMessage() {
+  const text = input.value.trim();
+  if (!text) return;
+
+  addMessage(text, "user");
+  input.value = "";
   btn.classList.remove("active");
+  btn.disabled = true;
 
-  const thinking = addStatus("NIDAAN AI is thinking…");
-  setTimeout(()=>{
+  const thinking = addMessage("NIDAAN AI is thinking...", "ai", "thinking");
+
+  setTimeout(() => {
     thinking.remove();
-    const typing = addStatus("NIDAAN AI is typing…");
-    
-    fetch("https://n8n-oazxlbnc.us-west-1.clawcloudrun.com/webhook/nidaan-chat",{
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body:JSON.stringify({message:text})
+    const typing = addMessage("NIDAAN AI is typing...", "ai", "typing");
+
+    fetch("https://n8n-oazxlbnc.us-west-1.clawcloudrun.com/webhook/nidaan-chat", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ message: text })
     })
-    .then(r=>r.json())
-    .then(d=>{
+    .then(res => res.json())
+    .then(data => {
       typing.remove();
-      addMsg(highlight(d.reply || "No reply from AI"),"ai");
+      addMessage(data.reply || "No reply from AI", "ai");
     })
-    .catch(()=>{
+    .catch(() => {
       typing.remove();
-      addMsg("Error connecting to NIDAAN AI","ai");
+      addMessage("Error connecting to NIDAAN AI", "ai");
     });
-  },500);
-}
-
-function addMsg(text,type){
-  const div=document.createElement("div");
-  div.className="message "+type;
-  div.innerHTML=text+`<div class="time">${timeNow()}</div>`;
-  chat.appendChild(div);
-  chat.scrollTop=chat.scrollHeight;
-}
-
-function addStatus(text){
-  const div=document.createElement("div");
-  div.className="message ai status";
-  div.innerText=text;
-  chat.appendChild(div);
-  chat.scrollTop=chat.scrollHeight;
-  return div;
-}
-
-function timeNow(){
-  const d=new Date();
-  return d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-}
-
-function highlight(text){
-  return text.replace(/(\b[A-Z]{1,3}-?\d+\b|\b\d{4,}\b)/g,
-    '<span class="highlight">$1</span>');
+  }, 600);
 }
 </script>
 
