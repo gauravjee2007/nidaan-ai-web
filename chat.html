@@ -79,9 +79,31 @@
 
   <!-- Input box -->
   <footer>
-    <input type="text" placeholder="Type your message...">
-<button>Send</button>
+   <input type="text" id="userInput" placeholder="Type your message...">
+<button onclick="sendMessage()">Send</button>
   </footer>
+  <script>
+  function sendMessage() {
+    const input = document.getElementById("userInput");
+    const messageText = input.value.trim();
 
+    if (messageText === "") return;
+
+    const chatArea = document.querySelector(".chat-area");
+
+    // Create message bubble
+    const msgDiv = document.createElement("div");
+    msgDiv.className = "message";
+    msgDiv.innerText = messageText;
+
+    chatArea.appendChild(msgDiv);
+
+    // Clear input
+    input.value = "";
+
+    // Scroll to bottom
+    chatArea.scrollTop = chatArea.scrollHeight;
+  }
+</script>
 </body>
 </html>
