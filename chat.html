@@ -13,24 +13,26 @@
 
 body {
   margin: 0;
-  background: #f0f2f5;
+  background: #f1f3f5;
   display: flex;
   flex-direction: column;
   height: 100vh;
 }
 
-/* 🔵 HEADER – LEFT TO RIGHT LIGHTING */
+/* 🔵 METALLIC HEADER */
 header {
   background: linear-gradient(
     90deg,
-    #0a2236 0%,
-    #143a5a 35%,
-    #2f6fa3 60%,
+    #0b1e2d 0%,
+    #1f3f5a 25%,
+    #3a6f9a 55%,
     #6fa8dc 100%
   );
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.25),
-              inset 0 -1px 0 rgba(0,0,0,0.3);
-  color: white;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.25),
+    inset 0 -2px 4px rgba(0,0,0,0.4),
+    0 4px 10px rgba(0,0,0,0.25);
+  color: #fff;
   text-align: center;
   padding: 22px;
   font-size: 36px;
@@ -38,7 +40,7 @@ header {
   letter-spacing: 2px;
 }
 
-/* CHAT */
+/* CHAT AREA */
 .chat-area {
   flex: 1;
   padding: 18px;
@@ -50,35 +52,36 @@ header {
 
 .message {
   padding: 12px 16px;
-  border-radius: 12px;
-  max-width: 80%;
+  border-radius: 14px;
+  max-width: 78%;
   font-size: 17px;
+  line-height: 1.45;
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
-/* 🟢 USER – DARK LIME */
+/* 🟢 USER – HARLEQUIN GREEN */
 .user {
   align-self: flex-end;
-  background: #4f8f2f; /* DARK LIME */
+  background: linear-gradient(135deg, #3fff00, #2ecc71);
   color: #ffffff;
 }
 
-/* AI */
+/* 🤖 AI – GLASS METALLIC */
 .ai {
   align-self: flex-start;
-  background: rgba(255,255,255,0.75);
+  background: rgba(255,255,255,0.78);
   backdrop-filter: blur(10px);
   color: #000;
 }
 
 /* THINKING / TYPING */
 .thinking {
-  background: rgba(180,210,180,0.9);
+  background: rgba(160, 220, 160, 0.95);
   font-weight: bold;
 }
 
 .typing {
-  background: rgba(170,190,230,0.9);
+  background: rgba(170, 190, 230, 0.95);
   font-weight: bold;
 }
 
@@ -93,12 +96,13 @@ header {
 /* FOOTER */
 footer {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   padding: 12px;
-  background: #fff;
+  background: #ffffff;
   border-top: 1px solid #ccc;
 }
 
+/* INPUT */
 input {
   flex: 1;
   padding: 14px;
@@ -108,25 +112,30 @@ input {
   outline: none;
 }
 
+/* BUTTONS */
 button {
-  width: 52px;
-  height: 52px;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
   border: none;
   font-size: 20px;
   cursor: pointer;
 }
 
+/* SEND – FIXED & ACTIVE */
 #sendBtn {
   background: linear-gradient(135deg, #2f6fa3, #1c4f7a);
-  color: white;
+  color: #fff;
+}
+#sendBtn:hover {
+  filter: brightness(1.15);
 }
 
+/* MIC */
 #micBtn {
   background: linear-gradient(135deg, #555, #333);
   color: white;
 }
-
 #micBtn.listening {
   background: linear-gradient(135deg, #e53935, #b71c1c);
 }
@@ -162,12 +171,12 @@ function now() {
   return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
 }
 
-/* ENTER SEND */
+/* ENTER KEY */
 input.addEventListener("keydown", e => {
   if (e.key === "Enter") sendMessage();
 });
 
-/* VOICE INPUT ONLY (NO VOICE OUTPUT) */
+/* VOICE INPUT ONLY */
 let recognition;
 if ('webkitSpeechRecognition' in window) {
   recognition = new webkitSpeechRecognition();
@@ -185,7 +194,9 @@ micBtn.onclick = () => {
   recognition.start();
 };
 
-/* SEND MESSAGE */
+/* SEND BUTTON FIX */
+sendBtn.onclick = () => sendMessage();
+
 function sendMessage() {
   const text = input.value.trim();
   if (!text) return;
