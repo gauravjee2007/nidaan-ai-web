@@ -19,15 +19,16 @@ body {
   height: 100vh;
 }
 
-/* HEADER – GLASSY METALLIC */
+/* 🔵 HEADER – LEFT TO RIGHT LIGHTING */
 header {
   background: linear-gradient(
-    to bottom,
+    90deg,
     #0a2236 0%,
-    #143a5a 40%,
-    #2f5f8f 100%
+    #143a5a 35%,
+    #2f6fa3 60%,
+    #6fa8dc 100%
   );
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.25),
               inset 0 -1px 0 rgba(0,0,0,0.3);
   color: white;
   text-align: center;
@@ -55,21 +56,24 @@ header {
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
+/* 🟢 USER – DARK LIME */
 .user {
   align-self: flex-end;
-  background: #5aa356;
-  color: #fff;
+  background: #4f8f2f; /* DARK LIME */
+  color: #ffffff;
 }
 
+/* AI */
 .ai {
   align-self: flex-start;
-  background: rgba(255,255,255,0.7);
+  background: rgba(255,255,255,0.75);
   backdrop-filter: blur(10px);
   color: #000;
 }
 
+/* THINKING / TYPING */
 .thinking {
-  background: rgba(170,210,170,0.9);
+  background: rgba(180,210,180,0.9);
   font-weight: bold;
 }
 
@@ -78,6 +82,7 @@ header {
   font-weight: bold;
 }
 
+/* TIME */
 .time {
   font-size: 12px;
   opacity: 0.6;
@@ -125,11 +130,6 @@ button {
 #micBtn.listening {
   background: linear-gradient(135deg, #e53935, #b71c1c);
 }
-
-#voiceToggle {
-  background: linear-gradient(135deg, #777, #444);
-  color: white;
-}
 </style>
 </head>
 
@@ -147,7 +147,6 @@ button {
 
 <footer>
   <input id="userInput" type="text" placeholder="Type your query..." />
-  <button id="voiceToggle">🔇</button>
   <button id="micBtn">🎙</button>
   <button id="sendBtn">➤</button>
 </footer>
@@ -157,15 +156,6 @@ const input = document.getElementById("userInput");
 const chat = document.getElementById("chatArea");
 const sendBtn = document.getElementById("sendBtn");
 const micBtn = document.getElementById("micBtn");
-const voiceToggle = document.getElementById("voiceToggle");
-
-let voiceEnabled = false;
-
-/* TOGGLE VOICE */
-voiceToggle.onclick = () => {
-  voiceEnabled = !voiceEnabled;
-  voiceToggle.textContent = voiceEnabled ? "🔈" : "🔇";
-};
 
 /* TIME */
 function now() {
@@ -177,7 +167,7 @@ input.addEventListener("keydown", e => {
   if (e.key === "Enter") sendMessage();
 });
 
-/* VOICE INPUT */
+/* VOICE INPUT ONLY (NO VOICE OUTPUT) */
 let recognition;
 if ('webkitSpeechRecognition' in window) {
   recognition = new webkitSpeechRecognition();
@@ -194,36 +184,6 @@ micBtn.onclick = () => {
   micBtn.classList.add("listening");
   recognition.start();
 };
-
-/* LANGUAGE DETECT */
-function detectLang(text) {
-  return /[\u0900-\u097F]/.test(text) ? "hi-IN" : "en-IN";
-}
-
-/* MALE VOICE FORCE */
-function speakAI(text) {
-  if (!voiceEnabled || !window.speechSynthesis) return;
-
-  const lang = detectLang(text);
-  const msg = new SpeechSynthesisUtterance(text);
-  msg.lang = lang;
-  msg.rate = 0.9;
-  msg.pitch = 0.6;
-
-  const voices = speechSynthesis.getVoices();
-  let male = voices.find(v =>
-    v.lang.startsWith(lang) &&
-    /male|man|deep|ravi|arjun/i.test(v.name)
-  );
-
-  if (!male) {
-    male = voices.find(v => /male|man|english/i.test(v.name));
-  }
-
-  if (male) msg.voice = male;
-
-  speechSynthesis.speak(msg);
-}
 
 /* SEND MESSAGE */
 function sendMessage() {
@@ -264,7 +224,6 @@ function sendMessage() {
       ai.innerHTML = `${d.reply}<div class="time">${now()}</div>`;
       chat.appendChild(ai);
       chat.scrollTop = chat.scrollHeight;
-      speakAI(d.reply);
     });
   }, 1500);
 }
