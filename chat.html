@@ -19,9 +19,16 @@ body {
   height: 100vh;
 }
 
-/* HEADER */
+/* HEADER – GLASSY METALLIC */
 header {
-  background: linear-gradient(135deg, #0b2a44, #1f3b57);
+  background: linear-gradient(
+    to bottom,
+    #0a2236 0%,
+    #143a5a 40%,
+    #2f5f8f 100%
+  );
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),
+              inset 0 -1px 0 rgba(0,0,0,0.3);
   color: white;
   text-align: center;
   padding: 22px;
@@ -50,7 +57,7 @@ header {
 
 .user {
   align-self: flex-end;
-  background: linear-gradient(135deg, #4caf50, #2e7d32);
+  background: #5aa356;
   color: #fff;
 }
 
@@ -62,12 +69,12 @@ header {
 }
 
 .thinking {
-  background: rgba(160,210,160,0.7);
+  background: rgba(170,210,170,0.9);
   font-weight: bold;
 }
 
 .typing {
-  background: rgba(180,200,230,0.7);
+  background: rgba(170,190,230,0.9);
   font-weight: bold;
 }
 
@@ -118,6 +125,11 @@ button {
 #micBtn.listening {
   background: linear-gradient(135deg, #e53935, #b71c1c);
 }
+
+#voiceToggle {
+  background: linear-gradient(135deg, #777, #444);
+  color: white;
+}
 </style>
 </head>
 
@@ -135,6 +147,7 @@ button {
 
 <footer>
   <input id="userInput" type="text" placeholder="Type your query..." />
+  <button id="voiceToggle">🔇</button>
   <button id="micBtn">🎙</button>
   <button id="sendBtn">➤</button>
 </footer>
@@ -144,22 +157,27 @@ const input = document.getElementById("userInput");
 const chat = document.getElementById("chatArea");
 const sendBtn = document.getElementById("sendBtn");
 const micBtn = document.getElementById("micBtn");
+const voiceToggle = document.getElementById("voiceToggle");
 
-/* ---------- TIME ---------- */
+let voiceEnabled = false;
+
+/* TOGGLE VOICE */
+voiceToggle.onclick = () => {
+  voiceEnabled = !voiceEnabled;
+  voiceToggle.textContent = voiceEnabled ? "🔈" : "🔇";
+};
+
+/* TIME */
 function now() {
   return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
 }
 
-/* ---------- FORCE TYPING ENABLE (FIX) ---------- */
-input.disabled = false;
-input.focus();
-
-/* ENTER KEY SEND */
+/* ENTER SEND */
 input.addEventListener("keydown", e => {
   if (e.key === "Enter") sendMessage();
 });
 
-/* ---------- VOICE INPUT ---------- */
+/* VOICE INPUT */
 let recognition;
 if ('webkitSpeechRecognition' in window) {
   recognition = new webkitSpeechRecognition();
@@ -177,20 +195,37 @@ micBtn.onclick = () => {
   recognition.start();
 };
 
-/* ---------- AI VOICE OUTPUT ---------- */
+/* LANGUAGE DETECT */
+function detectLang(text) {
+  return /[\u0900-\u097F]/.test(text) ? "hi-IN" : "en-IN";
+}
+
+/* MALE VOICE FORCE */
 function speakAI(text) {
-  if (!window.speechSynthesis) return;
+  if (!voiceEnabled || !window.speechSynthesis) return;
+
+  const lang = detectLang(text);
   const msg = new SpeechSynthesisUtterance(text);
-  msg.lang = "en-IN";
-  msg.rate = 0.9;   // slow, senior technician feel
-  msg.pitch = 0.8;
+  msg.lang = lang;
+  msg.rate = 0.9;
+  msg.pitch = 0.6;
+
   const voices = speechSynthesis.getVoices();
-  const male = voices.find(v => v.lang === "en-IN" && v.name.toLowerCase().includes("male"));
+  let male = voices.find(v =>
+    v.lang.startsWith(lang) &&
+    /male|man|deep|ravi|arjun/i.test(v.name)
+  );
+
+  if (!male) {
+    male = voices.find(v => /male|man|english/i.test(v.name));
+  }
+
   if (male) msg.voice = male;
+
   speechSynthesis.speak(msg);
 }
 
-/* ---------- SEND MESSAGE ---------- */
+/* SEND MESSAGE */
 function sendMessage() {
   const text = input.value.trim();
   if (!text) return;
@@ -207,7 +242,6 @@ function sendMessage() {
   thinking.className = "message ai thinking";
   thinking.textContent = "NIDAAN AI is thinking...";
   chat.appendChild(thinking);
-  chat.scrollTop = chat.scrollHeight;
 
   setTimeout(() => {
     thinking.remove();
@@ -216,12 +250,11 @@ function sendMessage() {
     typing.className = "message ai typing";
     typing.textContent = "NIDAAN AI is typing...";
     chat.appendChild(typing);
-    chat.scrollTop = chat.scrollHeight;
 
     fetch("https://n8n-oazxlbnc.us-west-1.clawcloudrun.com/webhook/nidaan-chat", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: text })
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({message: text})
     })
     .then(r => r.json())
     .then(d => {
@@ -231,13 +264,9 @@ function sendMessage() {
       ai.innerHTML = `${d.reply}<div class="time">${now()}</div>`;
       chat.appendChild(ai);
       chat.scrollTop = chat.scrollHeight;
-
-      speakAI(d.reply); // 🔊 AI VOICE REPLY
-    })
-    .catch(() => {
-      typing.remove();
+      speakAI(d.reply);
     });
-  }, 1400);
+  }, 1500);
 }
 </script>
 
