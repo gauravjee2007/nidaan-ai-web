@@ -49,34 +49,59 @@
     font-size: 17px;
     line-height: 1.45;
     box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    position: relative;
   }
 
-  /* USER */
+  /* TIMESTAMP */
+  .time {
+    font-size: 12px;
+    opacity: 0.6;
+    margin-top: 6px;
+    text-align: right;
+  }
+
+  /* USER MESSAGE */
   .user {
     align-self: flex-end;
-    background: #5aa357;
-    color: #fff;
+    background: linear-gradient(135deg, #4caf50, #2e7d32); /* dark lime */
+    color: #ffffff;
     border-bottom-right-radius: 4px;
   }
 
-  /* AI */
+  /* AI MESSAGE – GLASSY METALLIC */
   .ai {
     align-self: flex-start;
-    background: #ffffff;
+    background: rgba(255,255,255,0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     color: #000;
+    border: 1px solid rgba(255,255,255,0.35);
     border-bottom-left-radius: 4px;
   }
 
   /* THINKING */
   .thinking {
-    background: #cfe7cf;
+    background: rgba(170, 215, 170, 0.6);
     font-weight: bold;
   }
 
   /* TYPING */
   .typing {
-    background: #cddff1;
+    background: rgba(180, 200, 230, 0.6);
     font-weight: bold;
+  }
+
+  /* DOT ANIMATION */
+  .dots::after {
+    content: "";
+    animation: dots 1.5s infinite;
+  }
+
+  @keyframes dots {
+    0% { content: ""; }
+    33% { content: "."; }
+    66% { content: ".."; }
+    100% { content: "..."; }
   }
 
   /* FOOTER */
@@ -97,7 +122,7 @@
     outline: none;
   }
 
-  /* BUTTONS */
+  /* SEND BUTTON */
   button {
     width: 52px;
     height: 52px;
@@ -124,7 +149,6 @@
     opacity: 1;
   }
 
-  /* MOBILE POLISH */
   @media (max-width: 600px) {
     header {
       font-size: 28px;
@@ -146,6 +170,7 @@
   <div class="message ai">
     Hello 👋 I’m <b>NIDAAN AI</b> — your intelligent SS Rig assistant.<br>
     How may I help you?
+    <div class="time"></div>
   </div>
 </div>
 
@@ -161,40 +186,32 @@
   const sendBtn = document.getElementById("sendBtn");
   const micBtn = document.getElementById("micBtn");
 
+  function timeNow() {
+    const d = new Date();
+    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
   let recognition;
   if ('webkitSpeechRecognition' in window) {
     recognition = new webkitSpeechRecognition();
     recognition.lang = "en-IN";
-    recognition.continuous = false;
-    recognition.interimResults = false;
-
     recognition.onresult = e => {
       input.value = e.results[0][0].transcript;
       sendBtn.classList.add("active");
     };
-
-    recognition.onend = () => {
-      micBtn.classList.remove("listening");
-    };
+    recognition.onend = () => micBtn.classList.remove("listening");
   } else {
     micBtn.style.display = "none";
   }
 
-  micBtn.addEventListener("click", () => {
-    if (!recognition) return;
+  micBtn.onclick = () => {
     micBtn.classList.add("listening");
     recognition.start();
-  });
+  };
 
-  input.addEventListener("input", () => {
-    sendBtn.classList.toggle("active", input.value.trim().length > 0);
-  });
-
-  input.addEventListener("keydown", e => {
-    if (e.key === "Enter") sendMessage();
-  });
-
-  sendBtn.addEventListener("click", sendMessage);
+  input.oninput = () => sendBtn.classList.toggle("active", input.value.trim());
+  input.onkeydown = e => e.key === "Enter" && sendMessage();
+  sendBtn.onclick = sendMessage;
 
   function sendMessage() {
     const text = input.value.trim();
@@ -202,7 +219,7 @@
 
     const userMsg = document.createElement("div");
     userMsg.className = "message user";
-    userMsg.innerText = text;
+    userMsg.innerHTML = `${text}<div class="time">${timeNow()}</div>`;
     chat.appendChild(userMsg);
 
     input.value = "";
@@ -210,8 +227,8 @@
     scrollDown();
 
     const thinking = document.createElement("div");
-    thinking.className = "message ai thinking";
-    thinking.innerText = "NIDAAN AI is thinking...";
+    thinking.className = "message ai thinking dots";
+    thinking.innerText = "NIDAAN AI is thinking";
     chat.appendChild(thinking);
     scrollDown();
 
@@ -219,8 +236,8 @@
       thinking.remove();
 
       const typing = document.createElement("div");
-      typing.className = "message ai typing";
-      typing.innerText = "NIDAAN AI is typing...";
+      typing.className = "message ai typing dots";
+      typing.innerText = "NIDAAN AI is typing";
       chat.appendChild(typing);
       scrollDown();
 
@@ -229,12 +246,12 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: text })
       })
-      .then(res => res.json())
-      .then(data => {
+      .then(r => r.json())
+      .then(d => {
         typing.remove();
         const aiMsg = document.createElement("div");
         aiMsg.className = "message ai";
-        aiMsg.innerText = data.reply || "No reply from AI";
+        aiMsg.innerHTML = `${d.reply || "No reply from AI"}<div class="time">${timeNow()}</div>`;
         chat.appendChild(aiMsg);
         scrollDown();
       })
@@ -242,11 +259,11 @@
         typing.remove();
         const err = document.createElement("div");
         err.className = "message ai";
-        err.innerText = "Error connecting to NIDAAN AI";
+        err.innerHTML = `Error connecting to NIDAAN AI<div class="time">${timeNow()}</div>`;
         chat.appendChild(err);
         scrollDown();
       });
-    }, 500);
+    }, 1200); // thinking time increased
   }
 
   function scrollDown() {
