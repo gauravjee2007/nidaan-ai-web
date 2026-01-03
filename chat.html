@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NIDAAN AI – Chat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    header {
+      background: #0a2a43;
+      color: white;
+      padding: 12px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .chat-area {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+    }
+
+    .message {
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      max-width: 90%;
+      margin-bottom: 10px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    footer {
+      padding: 10px;
+      background: #ffffff;
+      display: flex;
+      gap: 8px;
+      border-top: 1px solid #ddd;
+    }
+
+    input {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header>
+    NIDAAN AI
+  </header>
+
+  <!-- Chat messages -->
+  <div class="chat-area">
+    <div class="message">
+      Hello 👋 I’m <b>NIDAAN AI</b> — your intelligent SS Rig assistant.<br>
+      How may I help you?
+    </div>
+  </div>
+
+  <!-- Input box -->
+  <footer>
+    <input type="text" placeholder="Type your message..." disabled>
+    <button disabled>Send</button>
+  </footer>
+
+</body>
+</html>
