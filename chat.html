@@ -22,11 +22,14 @@
       font-weight: bold;
     }
 
-    .chat-area {
-      flex: 1;
-      padding: 15px;
-      overflow-y: auto;
-    }
+.chat-area {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
 
     .message {
       background: white;
@@ -76,8 +79,8 @@
 
   <!-- Input box -->
   <footer>
-    <input type="text" placeholder="Type your message..." disabled>
-    <button disabled>Send</button>
+    <input type="text" placeholder="Type your message...">
+<button>Send</button>
   </footer>
 
 </body>
