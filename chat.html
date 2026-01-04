@@ -31,6 +31,15 @@ header{
   font-size:26px;
   font-weight:600;
 }
+  function renderMarkdown(text) {
+  if (!text) return "";
+
+  return text
+    // **bold**
+    .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
+    // line breaks
+    .replace(/\n/g, "<br>");
+}
 
 #darkToggle{
   position:absolute;
