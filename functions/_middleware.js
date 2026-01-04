@@ -1,33 +1,32 @@
-export async function onRequest(context) {
-  const { request, next } = context;
+export async function onRequest({ request, next }) {
   const url = new URL(request.url);
-
   const cookie = request.headers.get("Cookie") || "";
   const isLoggedIn = cookie.includes("nidaan_auth=true");
 
-  // ✅ PUBLIC / ALLOWED PATHS
-  const publicPaths = [
-    "/",
-    "/login",
-    "/login.html",
-    "/do-login",
-    "/register",
-    "/register.html"
-  ];
+  // ✅ Always allow static assets
+  if (
+    url.pathname.endsWith(".css") ||
+    url.pathname.endsWith(".js") ||
+    url.pathname.endsWith(".png") ||
+    url.pathname.endsWith(".jpg")
+  ) {
+    return next();
+  }
 
-  // Allow public pages
-  if (publicPaths.includes(url.pathname)) {
+  // ✅ If user hits /login → send to login.html
+  if (url.pathname === "/login") {
+    return Response.redirect(new URL("/login.html", url.origin), 302);
+  }
+
+  // ✅ Allow login page itself
+  if (url.pathname === "/login.html" || url.pathname === "/") {
     return next();
   }
 
   // 🔒 Protect chat page
   if (url.pathname.startsWith("/chat") && !isLoggedIn) {
-    return Response.redirect(
-      new URL("/login", url.origin),
-      302
-    );
+    return Response.redirect(new URL("/login.html", url.origin), 302);
   }
 
-  // Allow everything else
   return next();
 }
