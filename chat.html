@@ -25,13 +25,7 @@ header {
   left: 0;
   width: 100%;
   z-index: 100;
-  background: linear-gradient(
-    90deg,
-    #0b1e2d 0%,
-    #1f3f5a 25%,
-    #3a6f9a 55%,
-    #6fa8dc 100%
-  );
+  background: linear-gradient(135deg,#0f172a,#1e3a8a);
   color: #fff;
   text-align: center;
   padding: 22px;
@@ -77,20 +71,22 @@ header {
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
+/* ✅ USER MESSAGE – LIGHT BLUE */
 .user {
   align-self: flex-end;
-  background: #228B22;
-  color: #fff;
+  background: linear-gradient(135deg,#9ecbff,#6ea8ff);
+  color: #0b1e2d;
 }
 
+/* AI MESSAGE */
 .ai {
   align-self: flex-start;
   background: rgba(255,255,255,0.78);
   backdrop-filter: blur(10px);
 }
 
-.thinking { background: rgba(160,220,160,0.95); font-weight: bold; }
-.typing { background: rgba(170,190,230,0.95); font-weight: bold; }
+.thinking { background: rgba(190,220,255,0.95); font-weight: bold; }
+.typing { background: rgba(200,215,245,0.95); font-weight: bold; }
 
 .dots::after {
   content: '';
@@ -224,10 +220,9 @@ micBtn.onclick = () => {
   recognition.start();
 };
 
-/* SEND BUTTON */
+/* SEND */
 sendBtn.onclick = sendMessage;
 
-/* SEND MESSAGE FUNCTION */
 function sendMessage() {
   const text = input.value.trim();
   if (!text) return;
@@ -244,7 +239,6 @@ function sendMessage() {
   thinking.className = "message ai thinking";
   thinking.innerHTML = `NIDAAN AI is thinking<span class="dots"></span>`;
   chat.appendChild(thinking);
-  chat.scrollTop = chat.scrollHeight;
 
   setTimeout(() => {
     thinking.remove();
@@ -253,7 +247,6 @@ function sendMessage() {
     typing.className = "message ai typing";
     typing.innerHTML = `NIDAAN AI is typing<span class="dots"></span>`;
     chat.appendChild(typing);
-    chat.scrollTop = chat.scrollHeight;
 
     fetch("https://n8n-oazxlbnc.us-west-1.clawcloudrun.com/webhook/nidaan-chat", {
       method: "POST",
