@@ -12,41 +12,72 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
-  background:linear-gradient(135deg,#0f172a,#1e3a8a);
-  font-family:Arial, sans-serif;
+  background:linear-gradient(135deg,#075e54,#128c7e);
+  font-family:"Helvetica Neue", Helvetica, Arial, system-ui, -apple-system, sans-serif;
 }
+
+/* LOGIN CARD */
 .card{
-  background:#fff;
-  padding:30px;
+  background:#ffffff;
+  padding:32px;
   width:320px;
-  border-radius:12px;
+  border-radius:14px;
   text-align:center;
-  box-shadow:0 20px 40px rgba(0,0,0,.3);
+  box-shadow:0 20px 40px rgba(0,0,0,.35);
 }
-h2{margin-bottom:5px;color:#1e3a8a;}
-p{font-size:13px;color:#555;}
+
+h2{
+  margin-bottom:6px;
+  color:#075e54;
+  font-weight:600;
+}
+
+p{
+  font-size:13px;
+  color:#555;
+  margin-bottom:20px;
+}
+
+/* INPUTS */
 input{
   width:100%;
-  padding:10px;
+  padding:12px;
   margin:10px 0;
-  border-radius:8px;
-  border:1px solid #ccc;
+  border-radius:22px;
+  border:1px solid #9fd6c9;
+  font-size:15px;
+  outline:none;
 }
+
+/* BUTTON */
 button{
   width:100%;
   padding:12px;
+  margin-top:10px;
   border:none;
-  border-radius:8px;
-  background:#1e40af;
+  border-radius:22px;
+  background:#128c7e;
   color:#fff;
   font-size:15px;
+  font-weight:600;
   cursor:pointer;
 }
-#error{color:red;font-size:13px;margin-top:8px;}
+
+button:hover{
+  background:#0f7a6d;
+}
+
+/* ERROR */
+#error{
+  color:#c62828;
+  font-size:13px;
+  margin-top:10px;
+}
 </style>
 </head>
 
 <body>
+
 <div class="card">
   <h2>NIDAAN AI</h2>
   <p>Secure access to SS Rig Assistant</p>
@@ -71,5 +102,6 @@ function login(){
   }
 }
 </script>
+
 </body>
 </html>
