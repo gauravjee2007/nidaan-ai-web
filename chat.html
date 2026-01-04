@@ -57,6 +57,7 @@ header{
   display:flex;
   flex-direction:column;
   gap:14px;
+  scroll-behavior:smooth;
 }
 
 .message{
@@ -68,10 +69,10 @@ header{
   box-shadow:0 1px 6px rgba(0,0,0,0.12);
 }
 
-/* USER – DARK LEMON */
+/* USER – LIGHT SAVER GREEN */
 .user{
   align-self:flex-end;
-  background:#c6b800;
+  background:#d9fdd3;
   color:#000000;
 }
 
@@ -159,7 +160,7 @@ body.dark .ai{
   color:#f1f1f1;
 }
 body.dark .user{
-  background:#b3a700;
+  background:#9ae6b4;
   color:#000000;
 }
 </style>
@@ -192,17 +193,25 @@ const sendBtn=document.getElementById("sendBtn");
 const micBtn=document.getElementById("micBtn");
 const darkToggle=document.getElementById("darkToggle");
 
+/* DARK MODE */
 darkToggle.onclick=()=>{
  document.body.classList.toggle("dark");
  darkToggle.textContent=document.body.classList.contains("dark")?"☀":"🌙";
 };
 
+/* TIME */
 function now(){
  return new Date().toLocaleTimeString([],{
   hour:'2-digit',minute:'2-digit'
  });
 }
 
+/* AUTO SCROLL TO BOTTOM */
+function scrollBottom(){
+  chat.scrollTop = chat.scrollHeight;
+}
+
+/* ENTER */
 input.addEventListener("keydown",e=>{
  if(e.key==="Enter"){
   e.preventDefault();
@@ -210,6 +219,7 @@ input.addEventListener("keydown",e=>{
  }
 });
 
+/* MIC */
 let recognition=null;
 if(window.SpeechRecognition||window.webkitSpeechRecognition){
  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
@@ -227,6 +237,7 @@ micBtn.onclick=()=>{
  recognition.start();
 };
 
+/* SEND */
 sendBtn.onclick=sendMessage;
 
 function sendMessage(){
@@ -237,21 +248,24 @@ function sendMessage(){
  user.className="message user";
  user.innerHTML=`${text}<div class="time">${now()}</div>`;
  chat.appendChild(user);
+ scrollBottom();
 
  input.value="";
- chat.scrollTop=chat.scrollHeight;
 
  const thinking=document.createElement("div");
  thinking.className="message ai thinking";
  thinking.innerHTML=`NIDAAN AI is thinking<span class="dots"></span>`;
  chat.appendChild(thinking);
+ scrollBottom();
 
  setTimeout(()=>{
   thinking.remove();
+
   const typing=document.createElement("div");
   typing.className="message ai typing";
   typing.innerHTML=`NIDAAN AI is typing<span class="dots"></span>`;
   chat.appendChild(typing);
+  scrollBottom();
 
   fetch("https://n8n-oazxlbnc.us-west-1.clawcloudrun.com/webhook/nidaan-chat",{
    method:"POST",
@@ -265,10 +279,13 @@ function sendMessage(){
    ai.className="message ai";
    ai.innerHTML=`${d.reply}<div class="time">${now()}</div>`;
    chat.appendChild(ai);
-   chat.scrollTop=chat.scrollHeight;
+   scrollBottom();
   });
  },900);
 }
+
+/* ON LOAD → BOTTOM */
+window.onload = scrollBottom;
 </script>
 
 </body>
