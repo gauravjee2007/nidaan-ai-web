@@ -2,24 +2,25 @@ export async function onRequest(context) {
   const { request, next } = context;
   const url = new URL(request.url);
 
-  // 🔐 Read cookie
   const cookie = request.headers.get("Cookie") || "";
   const isLoggedIn = cookie.includes("nidaan_auth=true");
 
-  // ✅ Allow login related paths
+  // Allow login + root
   if (
+    url.pathname === "/" ||
     url.pathname === "/login.html" ||
-    url.pathname === "/do-login" ||
-    url.pathname === "/"
+    url.pathname === "/do-login"
   ) {
     return next();
   }
 
-  // 🔒 Protect chat page
-  if (url.pathname === "/chat.html" && !isLoggedIn) {
+  // Protect chat (both forms)
+  if (
+    (url.pathname === "/chat" || url.pathname === "/chat.html") &&
+    !isLoggedIn
+  ) {
     return Response.redirect(url.origin + "/login.html", 302);
   }
 
-  // ✅ Allow all other requests
   return next();
 }
