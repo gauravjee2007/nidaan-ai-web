@@ -18,20 +18,18 @@ body {
   overflow: hidden;
 }
 
-/* ================= HEADER (LOGIN PAGE STYLE) ================= */
+/* HEADER */
 header {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 100;
   background: linear-gradient(135deg, #0f172a, #1e3a8a);
   color: #fff;
   text-align: center;
   padding: 20px;
   font-size: 30px;
   font-weight: 700;
-  letter-spacing: 1px;
 }
 
 #darkToggle {
@@ -48,7 +46,7 @@ header {
   color: #fff;
 }
 
-/* ================= CHAT ================= */
+/* CHAT */
 .chat-area {
   position: absolute;
   top: 90px;
@@ -71,23 +69,20 @@ header {
   box-shadow: 0 2px 6px rgba(0,0,0,0.12);
 }
 
-/* USER – LIGHT BLUE (AS REQUESTED) */
 .user {
   align-self: flex-end;
   background: #9ec5fe;
   color: #0b2545;
 }
 
-/* AI – CLEAN WHITE */
 .ai {
   align-self: flex-start;
   background: #ffffff;
   color: #111;
 }
 
-/* THINKING / TYPING */
-.thinking { background: #e6f4ea; font-weight: 500; }
-.typing { background: #eef2ff; font-weight: 500; }
+.thinking { background: #e6f4ea; }
+.typing { background: #eef2ff; }
 
 .dots::after {
   content: '';
@@ -106,7 +101,7 @@ header {
   text-align: right;
 }
 
-/* ================= FOOTER ================= */
+/* FOOTER */
 footer {
   position: fixed;
   bottom: 0;
@@ -161,7 +156,7 @@ body.dark .ai { background: #020617; color: #e5e7eb; }
 
 <header>
   NIDAAN AI
-  <button id="darkToggle">🌙</button>
+  <button id="darkToggle" type="button">🌙</button>
 </header>
 
 <div class="chat-area" id="chatArea">
@@ -172,12 +167,11 @@ body.dark .ai { background: #020617; color: #e5e7eb; }
 </div>
 
 <footer>
-  <input id="userInput" type="text" placeholder="Type your query..." />
-  <button id="micBtn">🎙</button>
-  <button id="sendBtn">➤</button>
+  <input id="userInput" type="text" placeholder="Type your query..." autocomplete="off" />
+  <button id="micBtn" type="button">🎙</button>
+  <button id="sendBtn" type="button">➤</button>
 </footer>
 
-<!-- 🔴 JS EXACT SAME – NO CHANGE -->
 <script>
 const input = document.getElementById("userInput");
 const chat = document.getElementById("chatArea");
@@ -185,43 +179,98 @@ const sendBtn = document.getElementById("sendBtn");
 const micBtn = document.getElementById("micBtn");
 const darkToggle = document.getElementById("darkToggle");
 
+/* DARK MODE */
 darkToggle.onclick = () => {
   document.body.classList.toggle("dark");
   darkToggle.textContent = document.body.classList.contains("dark") ? "☀" : "🌙";
 };
 
+/* TIME */
 function now() {
   return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
 }
 
-input.addEventListener("keydown", e => {
+/* ENTER KEY – FIXED */
+input.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     e.preventDefault();
     sendMessage();
   }
 });
 
-let recognition;
-if ('webkitSpeechRecognition' in window) {
-  recognition = new webkitSpeechRecognition();
+/* MIC – FIXED */
+let recognition = null;
+if (window.SpeechRecognition || window.webkitSpeechRecognition) {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SR();
   recognition.lang = "en-IN";
-  recognition.onresult = e => {
+  recognition.continuous = false;
+  recognition.interimResults = false;
+
+  recognition.onresult = (e) => {
     input.value = e.results[0][0].transcript;
   };
-  recognition.onend = () => micBtn.classList.remove("listening");
+
+  recognition.onend = () => {
+    micBtn.classList.remove("listening");
+  };
 }
 
 micBtn.onclick = () => {
-  if (!recognition) return;
+  if (!recognition) {
+    alert("Speech recognition not supported in this browser");
+    return;
+  }
   micBtn.classList.add("listening");
   recognition.start();
 };
 
-sendBtn.onclick = sendMessage;
+/* SEND BUTTON – FIXED */
+sendBtn.onclick = () => sendMessage();
 
+/* SEND MESSAGE */
 function sendMessage() {
   const text = input.value.trim();
   if (!text) return;
 
   const user = document.createElement("div");
   user.className = "message user";
+  user.innerHTML = `${text}<div class="time">${now()}</div>`;
+  chat.appendChild(user);
+
+  input.value = "";
+  chat.scrollTop = chat.scrollHeight;
+
+  const thinking = document.createElement("div");
+  thinking.className = "message ai thinking";
+  thinking.innerHTML = `NIDAAN AI is thinking<span class="dots"></span>`;
+  chat.appendChild(thinking);
+
+  setTimeout(() => {
+    thinking.remove();
+
+    const typing = document.createElement("div");
+    typing.className = "message ai typing";
+    typing.innerHTML = `NIDAAN AI is typing<span class="dots"></span>`;
+    chat.appendChild(typing);
+
+    fetch("https://n8n-oazxlbnc.us-west-1.clawcloudrun.com/webhook/nidaan-chat", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ message: text })
+    })
+    .then(r => r.json())
+    .then(d => {
+      typing.remove();
+      const ai = document.createElement("div");
+      ai.className = "message ai";
+      ai.innerHTML = `${d.reply}<div class="time">${now()}</div>`;
+      chat.appendChild(ai);
+      chat.scrollTop = chat.scrollHeight;
+    });
+  }, 900);
+}
+</script>
+
+</body>
+</html>
