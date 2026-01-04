@@ -13,44 +13,46 @@
 
 body {
   margin: 0;
-  background: #f4f6f8;
+  background: #f3f6fb;
   height: 100vh;
   overflow: hidden;
 }
 
-/* HEADER */
+/* ================= HEADER ================= */
 header {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  background: linear-gradient(135deg, #0f172a, #1e3a8a);
+  z-index: 100;
+  background: linear-gradient(135deg, #0a1f44, #1e3a8a, #274caa);
   color: #fff;
   text-align: center;
   padding: 20px;
-  font-size: 30px;
+  font-size: 32px;
   font-weight: 700;
+  letter-spacing: 2px;
 }
 
 #darkToggle {
   position: absolute;
   right: 18px;
   top: 16px;
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   border: none;
   cursor: pointer;
-  font-size: 18px;
-  background: rgba(255,255,255,0.15);
+  font-size: 20px;
+  background: rgba(255,255,255,0.2);
   color: #fff;
 }
 
-/* CHAT */
+/* ================= CHAT ================= */
 .chat-area {
   position: absolute;
-  top: 90px;
-  bottom: 82px;
+  top: 92px;
+  bottom: 86px;
   left: 0;
   right: 0;
   padding: 20px;
@@ -62,27 +64,36 @@ header {
 
 .message {
   padding: 14px 18px;
-  border-radius: 14px;
+  border-radius: 16px;
   max-width: 75%;
   font-size: 16px;
   line-height: 1.6;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
 }
 
+/* USER – ROYAL BLUE */
 .user {
   align-self: flex-end;
-  background: #9ec5fe;
-  color: #0b2545;
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: #fff;
 }
 
+/* AI – LIGHT ROYAL */
 .ai {
   align-self: flex-start;
   background: #ffffff;
+  border-left: 5px solid #2563eb;
   color: #111;
 }
 
-.thinking { background: #e6f4ea; }
-.typing { background: #eef2ff; }
+.thinking {
+  background: #e8efff;
+  font-weight: 600;
+}
+.typing {
+  background: #dbe6ff;
+  font-weight: 600;
+}
 
 .dots::after {
   content: '';
@@ -96,35 +107,37 @@ header {
 
 .time {
   font-size: 11px;
-  opacity: 0.6;
+  opacity: 0.65;
   margin-top: 6px;
   text-align: right;
 }
 
-/* FOOTER */
+/* ================= FOOTER ================= */
 footer {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
+  z-index: 100;
   display: flex;
   gap: 10px;
   padding: 12px;
   background: #ffffff;
-  border-top: 1px solid #dcdcdc;
+  border-top: 2px solid #2563eb;
 }
 
 input {
   flex: 1;
   padding: 14px;
   font-size: 16px;
-  border-radius: 10px;
-  border: 1px solid #bbb;
+  border-radius: 12px;
+  border: 1.5px solid #2563eb;
 }
 
+/* BUTTONS */
 button {
-  width: 52px;
-  height: 52px;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
   border: none;
   font-size: 20px;
@@ -137,18 +150,26 @@ button {
 }
 
 #micBtn {
-  background: linear-gradient(135deg, #64748b, #334155);
+  background: linear-gradient(135deg, #1e40af, #0a1f44);
   color: #fff;
 }
 #micBtn.listening {
   background: linear-gradient(135deg, #dc2626, #991b1b);
 }
 
-/* DARK MODE */
-body.dark { background: #0f172a; }
+/* ================= DARK MODE ================= */
+body.dark { background: #0a1228; }
 body.dark footer { background: #020617; }
-body.dark input { background: #1e293b; color: #fff; }
-body.dark .ai { background: #020617; color: #e5e7eb; }
+body.dark input {
+  background: #020617;
+  color: #fff;
+  border-color: #2563eb;
+}
+body.dark .ai {
+  background: #020617;
+  color: #e5e7eb;
+  border-left-color: #3b82f6;
+}
 </style>
 </head>
 
@@ -190,45 +211,35 @@ function now() {
   return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
 }
 
-/* ENTER KEY – FIXED */
-input.addEventListener("keydown", (e) => {
+/* ENTER */
+input.addEventListener("keydown", e => {
   if (e.key === "Enter") {
     e.preventDefault();
     sendMessage();
   }
 });
 
-/* MIC – FIXED */
+/* MIC */
 let recognition = null;
 if (window.SpeechRecognition || window.webkitSpeechRecognition) {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   recognition = new SR();
   recognition.lang = "en-IN";
-  recognition.continuous = false;
-  recognition.interimResults = false;
-
-  recognition.onresult = (e) => {
+  recognition.onresult = e => {
     input.value = e.results[0][0].transcript;
   };
-
-  recognition.onend = () => {
-    micBtn.classList.remove("listening");
-  };
+  recognition.onend = () => micBtn.classList.remove("listening");
 }
 
 micBtn.onclick = () => {
-  if (!recognition) {
-    alert("Speech recognition not supported in this browser");
-    return;
-  }
+  if (!recognition) return;
   micBtn.classList.add("listening");
   recognition.start();
 };
 
-/* SEND BUTTON – FIXED */
-sendBtn.onclick = () => sendMessage();
+/* SEND */
+sendBtn.onclick = sendMessage;
 
-/* SEND MESSAGE */
 function sendMessage() {
   const text = input.value.trim();
   if (!text) return;
