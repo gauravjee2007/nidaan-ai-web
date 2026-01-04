@@ -6,33 +6,41 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+:root{
+  --primary1:#0a1f44;
+  --primary2:#1e3a8a;
+  --primary3:#274caa;
+  --user1:#2563eb;
+  --user2:#1e40af;
+  --accent:#2563eb;
+}
+
 * {
   box-sizing: border-box;
-  font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
+  font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 body {
   margin: 0;
+  background: #f3f6fb;
   height: 100vh;
   overflow: hidden;
-  background: linear-gradient(135deg, #0a1f44, #1e3a8a, #274caa);
 }
 
 /* ================= HEADER ================= */
 header {
   position: fixed;
   top: 0;
+  left: 0;
   width: 100%;
   z-index: 100;
-  padding: 20px;
+  background: linear-gradient(135deg,var(--primary1),var(--primary2),var(--primary3));
+  color: #fff;
   text-align: center;
-  font-size: 30px;
+  padding: 20px;
+  font-size: 32px;
   font-weight: 700;
   letter-spacing: 2px;
-  color: #fff;
-  background: rgba(10, 31, 68, 0.65);
-  backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(255,255,255,0.2);
 }
 
 #darkToggle {
@@ -45,68 +53,66 @@ header {
   border: none;
   cursor: pointer;
   font-size: 20px;
-  background: rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.2);
   color: #fff;
+}
+
+#rigSelect{
+  position:absolute;
+  left:18px;
+  top:22px;
+  padding:6px 10px;
+  border-radius:8px;
+  border:none;
+  font-weight:600;
 }
 
 /* ================= CHAT ================= */
 .chat-area {
   position: absolute;
-  top: 90px;
-  bottom: 88px;
+  top: 92px;
+  bottom: 86px;
   left: 0;
   right: 0;
-  padding: 22px;
+  padding: 20px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
 }
 
-/* GLASS MESSAGE BASE */
 .message {
-  padding: 16px 20px;
-  border-radius: 18px;
+  padding: 14px 18px;
+  border-radius: 16px;
   max-width: 75%;
   font-size: 16px;
   line-height: 1.6;
-  backdrop-filter: blur(14px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
 }
 
-/* USER – ROYAL BLUE GLASS */
+/* USER */
 .user {
   align-self: flex-end;
+  background: linear-gradient(135deg,var(--user1),var(--user2));
   color: #fff;
-  background: linear-gradient(
-    135deg,
-    rgba(59,130,246,0.9),
-    rgba(30,64,175,0.9)
-  );
 }
 
-/* AI – GLASS WHITE */
+/* AI */
 .ai {
   align-self: flex-start;
-  color: #0f172a;
-  background: rgba(255,255,255,0.85);
-  border-left: 5px solid #2563eb;
+  background: #ffffff;
+  border-left: 5px solid var(--accent);
+  color: #111;
 }
 
-.thinking {
-  background: rgba(219,234,254,0.85);
-  font-weight: 600;
-}
-.typing {
-  background: rgba(224,231,255,0.85);
-  font-weight: 600;
-}
+.thinking { background:#e8efff;font-weight:600;}
+.typing { background:#dbe6ff;font-weight:600;}
 
 .dots::after {
-  content: '';
-  display: inline-block;
-  width: 1.2em;
-  animation: dots 1.4s steps(3,end) infinite;
+  content:'';
+  display:inline-block;
+  width:1.2em;
+  animation:dots 1.4s steps(3,end) infinite;
 }
 @keyframes dots {
   0%{content:'';}33%{content:'.';}66%{content:'..';}100%{content:'...';}
@@ -114,7 +120,7 @@ header {
 
 .time {
   font-size: 11px;
-  opacity: 0.6;
+  opacity: 0.65;
   margin-top: 6px;
   text-align: right;
 }
@@ -123,25 +129,24 @@ header {
 footer {
   position: fixed;
   bottom: 0;
+  left: 0;
   width: 100%;
-  padding: 14px;
+  z-index: 100;
   display: flex;
   gap: 10px;
-  background: rgba(10,31,68,0.6);
-  backdrop-filter: blur(14px);
-  border-top: 1px solid rgba(255,255,255,0.2);
+  padding: 12px;
+  background: #ffffff;
+  border-top: 2px solid var(--accent);
 }
 
 input {
   flex: 1;
   padding: 14px;
   font-size: 16px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.4);
-  background: rgba(255,255,255,0.85);
+  border-radius: 12px;
+  border: 1.5px solid var(--accent);
 }
 
-/* BUTTONS */
 button {
   width: 54px;
   height: 54px;
@@ -152,30 +157,25 @@ button {
 }
 
 #sendBtn {
-  background: linear-gradient(135deg, #3b82f6, #1e40af);
-  color: #fff;
+  background: linear-gradient(135deg,var(--user1),var(--user2));
+  color:#fff;
 }
 
 #micBtn {
-  background: linear-gradient(135deg, #1e40af, #0a1f44);
-  color: #fff;
+  background: linear-gradient(135deg,var(--user2),var(--primary1));
+  color:#fff;
 }
 #micBtn.listening {
-  background: linear-gradient(135deg, #dc2626, #991b1b);
+  background: linear-gradient(135deg,#dc2626,#991b1b);
 }
 
-/* ================= DARK MODE ================= */
-body.dark {
-  background: linear-gradient(135deg, #020617, #020617);
-}
+/* DARK MODE */
+body.dark { background:#0a1228; }
+body.dark footer { background:#020617; }
+body.dark input { background:#020617;color:#fff; }
 body.dark .ai {
-  background: rgba(2,6,23,0.85);
-  color: #e5e7eb;
-  border-left-color: #3b82f6;
-}
-body.dark input {
-  background: rgba(2,6,23,0.9);
-  color: #fff;
+  background:#020617;
+  color:#e5e7eb;
 }
 </style>
 </head>
@@ -183,8 +183,13 @@ body.dark input {
 <body>
 
 <header>
+  <select id="rigSelect">
+    <option value="ss1">SS-1 Rig</option>
+    <option value="ss2">SS-2 Rig</option>
+    <option value="ng">NG Rig</option>
+  </select>
   NIDAAN AI
-  <button id="darkToggle">🌙</button>
+  <button id="darkToggle" type="button">🌙</button>
 </header>
 
 <div class="chat-area" id="chatArea">
@@ -195,93 +200,111 @@ body.dark input {
 </div>
 
 <footer>
-  <input id="userInput" type="text" placeholder="Type your query..." />
-  <button id="micBtn">🎙</button>
-  <button id="sendBtn">➤</button>
+  <input id="userInput" type="text" placeholder="Type your query..." autocomplete="off"/>
+  <button id="micBtn" type="button">🎙</button>
+  <button id="sendBtn" type="button">➤</button>
 </footer>
 
 <script>
-const input = document.getElementById("userInput");
-const chat = document.getElementById("chatArea");
-const sendBtn = document.getElementById("sendBtn");
-const micBtn = document.getElementById("micBtn");
-const darkToggle = document.getElementById("darkToggle");
-
-darkToggle.onclick = () => {
-  document.body.classList.toggle("dark");
-  darkToggle.textContent =
-    document.body.classList.contains("dark") ? "☀" : "🌙";
+const rigThemes={
+  ss1:{p1:"#0a1f44",p2:"#1e3a8a",p3:"#274caa",u1:"#2563eb",u2:"#1e40af"},
+  ss2:{p1:"#064e3b",p2:"#047857",p3:"#059669",u1:"#10b981",u2:"#047857"},
+  ng:{p1:"#3f1d38",p2:"#6d28d9",p3:"#7c3aed",u1:"#9333ea",u2:"#6d28d9"}
 };
 
-function now() {
-  return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+const rigSelect=document.getElementById("rigSelect");
+const root=document.documentElement;
+
+function applyTheme(rig){
+  const t=rigThemes[rig];
+  root.style.setProperty("--primary1",t.p1);
+  root.style.setProperty("--primary2",t.p2);
+  root.style.setProperty("--primary3",t.p3);
+  root.style.setProperty("--user1",t.u1);
+  root.style.setProperty("--user2",t.u2);
+  root.style.setProperty("--accent",t.u1);
+  localStorage.setItem("rig",rig);
 }
 
-input.addEventListener("keydown", e => {
-  if (e.key === "Enter") {
-    e.preventDefault();
-    sendMessage();
-  }
+rigSelect.onchange=()=>applyTheme(rigSelect.value);
+applyTheme(localStorage.getItem("rig")||"ss1");
+rigSelect.value=localStorage.getItem("rig")||"ss1";
+
+/* EXISTING JS – UNCHANGED */
+const input=document.getElementById("userInput");
+const chat=document.getElementById("chatArea");
+const sendBtn=document.getElementById("sendBtn");
+const micBtn=document.getElementById("micBtn");
+const darkToggle=document.getElementById("darkToggle");
+
+darkToggle.onclick=()=>{
+ document.body.classList.toggle("dark");
+ darkToggle.textContent=document.body.classList.contains("dark")?"☀":"🌙";
+};
+
+function now(){
+ return new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+}
+
+input.addEventListener("keydown",e=>{
+ if(e.key==="Enter"){e.preventDefault();sendMessage();}
 });
 
-let recognition = null;
-if (window.SpeechRecognition || window.webkitSpeechRecognition) {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  recognition = new SR();
-  recognition.lang = "en-IN";
-  recognition.onresult = e => {
-    input.value = e.results[0][0].transcript;
-  };
-  recognition.onend = () => micBtn.classList.remove("listening");
+let recognition=null;
+if(window.SpeechRecognition||window.webkitSpeechRecognition){
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ recognition=new SR();
+ recognition.lang="en-IN";
+ recognition.onresult=e=>{input.value=e.results[0][0].transcript;}
+ recognition.onend=()=>micBtn.classList.remove("listening");
 }
 
-micBtn.onclick = () => {
-  if (!recognition) return;
-  micBtn.classList.add("listening");
-  recognition.start();
+micBtn.onclick=()=>{
+ if(!recognition)return;
+ micBtn.classList.add("listening");
+ recognition.start();
 };
 
-sendBtn.onclick = sendMessage;
+sendBtn.onclick=sendMessage;
 
-function sendMessage() {
-  const text = input.value.trim();
-  if (!text) return;
+function sendMessage(){
+ const text=input.value.trim();
+ if(!text)return;
 
-  const user = document.createElement("div");
-  user.className = "message user";
-  user.innerHTML = `${text}<div class="time">${now()}</div>`;
-  chat.appendChild(user);
+ const user=document.createElement("div");
+ user.className="message user";
+ user.innerHTML=`${text}<div class="time">${now()}</div>`;
+ chat.appendChild(user);
+ input.value="";
+ chat.scrollTop=chat.scrollHeight;
 
-  input.value = "";
-  chat.scrollTop = chat.scrollHeight;
+ const thinking=document.createElement("div");
+ thinking.className="message ai thinking";
+ thinking.innerHTML=`NIDAAN AI is thinking<span class="dots"></span>`;
+ chat.appendChild(thinking);
 
-  const thinking = document.createElement("div");
-  thinking.className = "message ai thinking";
-  thinking.innerHTML = `NIDAAN AI is thinking<span class="dots"></span>`;
-  chat.appendChild(thinking);
+ setTimeout(()=>{
+  thinking.remove();
+  const typing=document.createElement("div");
+  typing.className="message ai typing";
+  typing.innerHTML=`NIDAAN AI is typing<span class="dots"></span>`;
+  chat.appendChild(typing);
 
-  setTimeout(() => {
-    thinking.remove();
-    const typing = document.createElement("div");
-    typing.className = "message ai typing";
-    typing.innerHTML = `NIDAAN AI is typing<span class="dots"></span>`;
-    chat.appendChild(typing);
-
-    fetch("https://n8n-oazxlbnc.us-west-1.clawcloudrun.com/webhook/nidaan-chat", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ message: text })
-    })
-    .then(r => r.json())
-    .then(d => {
-      typing.remove();
-      const ai = document.createElement("div");
-      ai.className = "message ai";
-      ai.innerHTML = `${d.reply}<div class="time">${now()}</div>`;
-      chat.appendChild(ai);
-      chat.scrollTop = chat.scrollHeight;
-    });
-  }, 900);
+  fetch("https://n8n-oazxlbnc.us-west-1.clawcloudrun.com/webhook/nidaan-chat",{
+   method:"POST",
+   headers:{"Content-Type":"application/json"},
+   body:JSON.stringify({message:text})
+  })
+  .then(r=>r.json())
+  .then(d=>{
+   typing.remove();
+   const ai=document.createElement("div");
+   ai.className="message ai";
+   ai.innerHTML=`${d.reply}<div class="time">${now()}</div>`;
+   chat.appendChild(ai);
+   chat.scrollTop=chat.scrollHeight;
+  });
+ },900);
 }
 </script>
 
