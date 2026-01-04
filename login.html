@@ -2,136 +2,155 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>NIDAAN AI – Login</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
+    * {
+      box-sizing: border-box;
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+    }
+
     body {
       margin: 0;
-      font-family: "Segoe UI", system-ui, -apple-system;
-      background: linear-gradient(135deg, #0f172a, #1e3a8a);
       height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
+      background: linear-gradient(135deg, #0f1c2f, #1e3c72);
     }
 
     .login-card {
+      background: #ffffff;
       width: 100%;
       max-width: 380px;
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 28px;
+      padding: 30px 28px;
+      border-radius: 14px;
       box-shadow: 0 20px 40px rgba(0,0,0,0.25);
-      animation: slideUp 0.6s ease;
-    }
-
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .title {
       text-align: center;
+    }
+
+    .login-card h1 {
+      margin: 0;
       font-size: 26px;
-      font-weight: 700;
-      color: #1e3a8a;
-      margin-bottom: 6px;
+      color: #1e3c72;
+      letter-spacing: 1px;
     }
 
-    .subtitle {
-      text-align: center;
+    .login-card p {
+      margin: 6px 0 22px;
       font-size: 14px;
-      color: #64748b;
-      margin-bottom: 22px;
+      color: #666;
     }
 
     label {
-      font-size: 13px;
-      font-weight: 600;
-      color: #334155;
       display: block;
+      text-align: left;
+      font-size: 13px;
       margin-bottom: 6px;
+      color: #333;
     }
 
     input {
       width: 100%;
-      padding: 12px;
-      border-radius: 10px;
-      border: 1px solid #cbd5f5;
-      font-size: 14px;
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 15px;
       margin-bottom: 16px;
       outline: none;
     }
 
     input:focus {
-      border-color: #2563eb;
-      box-shadow: 0 0 0 2px rgba(37,99,235,0.15);
+      border-color: #1e3c72;
     }
 
     button {
       width: 100%;
       padding: 12px;
+      border-radius: 10px;
       border: none;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #2563eb, #1e40af);
+      background: linear-gradient(135deg, #4b63e6, #3a4fcf);
       color: #fff;
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 600;
       cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
 
-    button:active {
-      transform: scale(0.98);
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.25);
     }
 
     .error {
-      text-align: center;
-      color: #dc2626;
+      margin-top: 12px;
       font-size: 13px;
-      margin-top: 10px;
-      display: none;
+      color: #d93025;
+      min-height: 18px;
     }
   </style>
 </head>
 
 <body>
+
   <div class="login-card">
-    <div class="title">NIDAAN AI</div>
-    <div class="subtitle">Secure access to SS Rig Assistant</div>
+    <h1>NIDAAN AI</h1>
+    <p>Secure access to SS Rig Assistant</p>
 
-    <label>Username</label>
-    <input id="username" placeholder="Enter username" />
+    <label for="username">Username</label>
+    <input id="username" type="text" placeholder="Enter username" autocomplete="off"/>
 
-    <label>Password</label>
-    <input id="password" type="password" placeholder="••••••••" />
+    <label for="password">Password</label>
+    <input id="password" type="password" placeholder="Enter password"/>
 
     <button onclick="login()">Login</button>
 
-    <div class="error" id="error">Invalid credentials</div>
+    <div id="error" class="error"></div>
   </div>
 
   <script>
     async function login() {
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
-      const error = document.getElementById("error");
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const errorEl = document.getElementById("error");
 
-      error.style.display = "none";
+      errorEl.innerText = "";
 
-      const res = await fetch("/do-login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
-      });
+      if (!username || !password) {
+        errorEl.innerText = "Username and password required";
+        return;
+      }
 
-      if (res.ok) {
-        window.location.href = "/chat";
-      } else {
-        error.style.display = "block";
+      try {
+        const res = await fetch("/do-login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            username: username,
+            password: password
+          })
+        });
+
+        if (res.ok) {
+          window.location.href = "/chat";
+        } else {
+          errorEl.innerText = "Invalid credentials";
+        }
+      } catch (err) {
+        errorEl.innerText = "Server error. Try again.";
       }
     }
+
+    // Enter key support
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") login();
+    });
   </script>
+
 </body>
 </html>
+
 
