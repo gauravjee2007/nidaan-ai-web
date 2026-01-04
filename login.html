@@ -1,98 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
 <title>NIDAAN AI – Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body {
-  margin: 0;
-  height: 100vh;
-  background: linear-gradient(135deg, #0f1b3d, #1e3c72);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: Arial, sans-serif;
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,#0f172a,#1e3a8a);
+  font-family:Arial, sans-serif;
 }
-
-.card {
-  background: white;
-  width: 90%;
-  max-width: 380px;
-  padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+.card{
+  background:#fff;
+  padding:30px;
+  width:320px;
+  border-radius:12px;
+  text-align:center;
+  box-shadow:0 20px 40px rgba(0,0,0,.3);
 }
-
-h1 {
-  text-align: center;
-  color: #1e3c72;
-  margin-bottom: 5px;
+h2{margin-bottom:5px;color:#1e3a8a;}
+p{font-size:13px;color:#555;}
+input{
+  width:100%;
+  padding:10px;
+  margin:10px 0;
+  border-radius:8px;
+  border:1px solid #ccc;
 }
-
-p {
-  text-align: center;
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 25px;
+button{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  background:#1e40af;
+  color:#fff;
+  font-size:15px;
+  cursor:pointer;
 }
-
-input {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 15px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 15px;
-}
-
-button {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
-  background: #3f5bd8;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #2f49b5;
-}
-
-#error {
-  color: red;
-  text-align: center;
-  margin-top: 10px;
-  font-size: 14px;
-}
+#error{color:red;font-size:13px;margin-top:8px;}
 </style>
 </head>
 
 <body>
-  <div class="card">
-    <h1>NIDAAN AI</h1>
-    <p>Secure access to SS Rig Assistant</p>
+<div class="card">
+  <h2>NIDAAN AI</h2>
+  <p>Secure access to SS Rig Assistant</p>
 
-    <input id="username" placeholder="Username" />
-    <input id="password" type="password" placeholder="Password" />
+  <input id="u" placeholder="Username">
+  <input id="p" type="password" placeholder="Password">
 
-    <button onclick="login()">Login</button>
-    <div id="error"></div>
-  </div>
+  <button onclick="login()">Login</button>
+  <div id="error"></div>
+</div>
 
 <script>
-function login() {
-  const u = document.getElementById("username").value;
-  const p = document.getElementById("password").value;
+function login(){
+  const u=document.getElementById("u").value;
+  const p=document.getElementById("p").value;
 
-  if (u === "admin" && p === "nidaan123") {
-    document.cookie = "nidaan_auth=true; path=/";
-    window.location.href = "/chat";
-  } else {
-    document.getElementById("error").innerText = "Invalid credentials";
+  if(u==="admin" && p==="nidaan123"){
+    document.cookie="nidaan_auth=true; path=/";
+    window.location.href="/chat";
+  }else{
+    document.getElementById("error").innerText="Invalid credentials";
   }
 }
 </script>
