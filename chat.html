@@ -8,8 +8,7 @@
 <style>
 *{
   box-sizing:border-box;
-  font-family: system-ui, -apple-system, "Segoe UI",
-               "Helvetica Neue", Arial, sans-serif;
+  font-family:"Helvetica Neue",Helvetica,Arial,system-ui,-apple-system,sans-serif;
 }
 
 body{
@@ -29,9 +28,8 @@ header{
   color:#fff;
   text-align:center;
   padding:18px;
-  font-size:28px;
+  font-size:26px;
   font-weight:600;
-  letter-spacing:1px;
 }
 
 #darkToggle{
@@ -51,8 +49,8 @@ header{
 /* ================= CHAT ================= */
 .chat-area{
   position:absolute;
-  top:82px;
-  bottom:78px;
+  top:78px;
+  bottom:76px;
   left:0; right:0;
   padding:16px;
   overflow-y:auto;
@@ -62,37 +60,31 @@ header{
 }
 
 .message{
-  padding:12px 16px;
+  padding:11px 15px;
   border-radius:14px;
   max-width:78%;
-  font-size:15.5px;
-  line-height:1.5;
-  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+  font-size:15px;
+  line-height:1.45;
+  box-shadow:0 1px 6px rgba(0,0,0,0.12);
 }
 
-/* USER – LIGHT TEAL */
+/* USER – DARK LEMON */
 .user{
   align-self:flex-end;
-  background:#dcf8f1;
-  color:#111;
+  background:#c6b800;
+  color:#000000;
 }
 
-/* AI – WHITE */
+/* AI */
 .ai{
   align-self:flex-start;
   background:#ffffff;
   color:#111;
 }
 
-/* THINKING / TYPING – LIGHT CONTRAST */
-.thinking{
-  background:#e1f5ec;
-  font-weight:600;
-}
-.typing{
-  background:#d0f0e6;
-  font-weight:600;
-}
+/* THINKING / TYPING */
+.thinking{background:#eefaf6;font-weight:600;}
+.typing{background:#def5ee;font-weight:600;}
 
 .dots::after{
   content:'';
@@ -110,7 +102,7 @@ header{
 .time{
   font-size:11px;
   opacity:0.6;
-  margin-top:5px;
+  margin-top:4px;
   text-align:right;
 }
 
@@ -130,54 +122,45 @@ footer{
 input{
   flex:1;
   padding:12px 14px;
-  font-size:15.5px;
+  font-size:15px;
   border-radius:22px;
   border:1px solid #9fd6c9;
-  outline:none;
 }
 
 /* BUTTONS */
 button{
-  width:48px;
-  height:48px;
+  width:46px;
+  height:46px;
   border-radius:50%;
   border:none;
   font-size:18px;
   cursor:pointer;
 }
 
-#sendBtn{
-  background:#128c7e;
-  color:#fff;
-}
+#sendBtn{background:#128c7e;color:#fff;}
+#micBtn{background:#075e54;color:#fff;}
+#micBtn.listening{background:#c62828;}
 
-#micBtn{
-  background:#075e54;
-  color:#fff;
-}
-#micBtn.listening{
-  background:#c62828;
-}
-
-/* ================= DARK MODE ================= */
+/* ================= PURE BLACK DARK MODE ================= */
 body.dark{
-  background:#0f2f2b;
+  background:#000000;
 }
 body.dark footer{
-  background:#0b3a34;
+  background:#000000;
+  border-top:1px solid #222;
 }
 body.dark input{
-  background:#134e4a;
+  background:#0b0b0b;
   color:#fff;
-  border-color:#2dd4bf;
+  border-color:#333;
 }
 body.dark .ai{
-  background:#134e4a;
-  color:#e6fffa;
+  background:#0b0b0b;
+  color:#f1f1f1;
 }
 body.dark .user{
-  background:#2dd4bf;
-  color:#022c22;
+  background:#b3a700;
+  color:#000000;
 }
 </style>
 </head>
@@ -191,7 +174,7 @@ body.dark .user{
 
 <div class="chat-area" id="chatArea">
   <div class="message ai">
-    Hello 👋 I’m <b>NIDAAN AI</b> — your intelligent SS Rig assistant. How may I help you today ?
+    Hello 👋 I’m <b>NIDAAN AI</b> — your intelligent SS Rig assistant.
     <div class="time"></div>
   </div>
 </div>
@@ -209,20 +192,17 @@ const sendBtn=document.getElementById("sendBtn");
 const micBtn=document.getElementById("micBtn");
 const darkToggle=document.getElementById("darkToggle");
 
-/* DARK MODE */
 darkToggle.onclick=()=>{
  document.body.classList.toggle("dark");
  darkToggle.textContent=document.body.classList.contains("dark")?"☀":"🌙";
 };
 
-/* TIME */
 function now(){
  return new Date().toLocaleTimeString([],{
   hour:'2-digit',minute:'2-digit'
  });
 }
 
-/* ENTER KEY */
 input.addEventListener("keydown",e=>{
  if(e.key==="Enter"){
   e.preventDefault();
@@ -230,7 +210,6 @@ input.addEventListener("keydown",e=>{
  }
 });
 
-/* MIC */
 let recognition=null;
 if(window.SpeechRecognition||window.webkitSpeechRecognition){
  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
@@ -248,7 +227,6 @@ micBtn.onclick=()=>{
  recognition.start();
 };
 
-/* SEND */
 sendBtn.onclick=sendMessage;
 
 function sendMessage(){
@@ -270,7 +248,6 @@ function sendMessage(){
 
  setTimeout(()=>{
   thinking.remove();
-
   const typing=document.createElement("div");
   typing.className="message ai typing";
   typing.innerHTML=`NIDAAN AI is typing<span class="dots"></span>`;
