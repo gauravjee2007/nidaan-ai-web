@@ -31,15 +31,6 @@ header{
   font-size:26px;
   font-weight:600;
 }
-  function renderMarkdown(text) {
-  if (!text) return "";
-
-  return text
-    // **bold**
-    .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
-    // line breaks
-    .replace(/\n/g, "<br>");
-}
 
 #darkToggle{
   position:absolute;
@@ -74,13 +65,12 @@ header{
   border-radius:14px;
   max-width:78%;
   font-size:15px;
-  line-height:1.6;          /* 🔹 line spacing better */
+  line-height:1.6;
   box-shadow:0 1px 6px rgba(0,0,0,0.12);
   white-space: pre-wrap;
 }
 
-
-/* USER – LIGHT SAVER GREEN */
+/* USER */
 .user{
   align-self:flex-end;
   background:#d9fdd3;
@@ -153,7 +143,7 @@ button{
 #micBtn{background:#075e54;color:#fff;}
 #micBtn.listening{background:#c62828;}
 
-/* ================= PURE BLACK DARK MODE ================= */
+/* ================= DARK MODE ================= */
 body.dark{
   background:#000000;
 }
@@ -186,7 +176,7 @@ body.dark .user{
 
 <div class="chat-area" id="chatArea">
   <div class="message ai">
-    Hello 👋 I’m <b>NIDAAN AI</b> — your intelligent SS Rig assistant.
+    Hello 👋 I’m <b>NIDAAN AI</b> — your intelligent SS Rig assistant.How may I help you ?
     <div class="time"></div>
   </div>
 </div>
@@ -198,6 +188,14 @@ body.dark .user{
 </footer>
 
 <script>
+/* ---------- MARKDOWN RENDER (FIX) ---------- */
+function renderMarkdown(text) {
+  if (!text) return "";
+  return text
+    .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
+    .replace(/\n/g, "<br>");
+}
+
 const input=document.getElementById("userInput");
 const chat=document.getElementById("chatArea");
 const sendBtn=document.getElementById("sendBtn");
@@ -217,7 +215,7 @@ function now(){
  });
 }
 
-/* AUTO SCROLL TO BOTTOM */
+/* AUTO SCROLL */
 function scrollBottom(){
   chat.scrollTop = chat.scrollHeight;
 }
@@ -288,14 +286,13 @@ function sendMessage(){
    typing.remove();
    const ai=document.createElement("div");
    ai.className="message ai";
-   ai.innerHTML=`${d.reply}<div class="time">${now()}</div>`;
+   ai.innerHTML=`${renderMarkdown(d.reply)}<div class="time">${now()}</div>`;
    chat.appendChild(ai);
    scrollBottom();
   });
  },900);
 }
 
-/* ON LOAD → BOTTOM */
 window.onload = scrollBottom;
 </script>
 
