@@ -277,7 +277,7 @@ function sendMessage(){
   chat.appendChild(typing);
   scrollBottom();
 
-  fetch("https://n8n-oazxlbnc.us-west-1.clawcloudrun.com/webhook-test/3aebf659-b488-4bf2-b1c3-02b104fc9b61",{
+  fetch("https://n8n-oazxlbnc.us-west-1.clawcloudrun.com/webhook/3aebf659-b488-4bf2-b1c3-02b104fc9b61",{
    method:"POST",
    headers:{"Content-Type":"application/json"},
    body:JSON.stringify({message:text})
